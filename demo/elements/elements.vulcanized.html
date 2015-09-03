@@ -19915,7 +19915,11 @@ module.exports = Array.isArray || function (arr) {
             app.route = 'code-of-conduct';
             app.scrollToTop();
         });
-
+        
+        //Change base for subfolders
+        //page.base('/dist');
+        page.base(window.location.pathname);
+        
         page({
             hashbang: true
         });
