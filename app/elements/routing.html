@@ -67,7 +67,9 @@
         
         //Change base for subfolders
         //page.base('/dist');
-        page.base(window.location.pathname);
+        str = window.location.pathname;
+       	str = str.substring(0, str.length - 1);
+        page.base(str);
         
         page({
             hashbang: true
