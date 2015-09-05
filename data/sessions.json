@@ -1,0 +1,92 @@
+[
+  {
+    "id": 101,
+    "title": "Building Firefox on Android from source",
+    "description": "",
+    "speakers": [1],
+    "language": "en",
+    "complexity": "Intermediate",
+    "presentation": "",
+    "video": ""
+  },
+  {
+    "id": 102,
+    "title": "UX talk 1",
+    "description": "",
+    "speakers": [2],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
+  },
+  {
+    "id": 103,
+    "title": "UX for animations on mobile",
+    "description": "",
+    "speakers": [3],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
+  },
+  {
+    "id": 104,
+    "title": "IoT: Building the Elbee",
+    "description": "",
+    "speakers": [4, 5],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
+  },
+  {
+    "id": 201,
+    "title": "WebVR Workshop",
+    "description": "",
+    "speakers": [],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
+  },
+  {
+    "id": 202,
+    "title": "Moonshot Sprint",
+    "description": "",
+    "speakers": [],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
+  },
+  {
+    "id": 301,
+    "title": "Data Privacy",
+    "description": "",
+    "speakers": [6],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
+  },
+  {
+    "id": 302,
+    "title": "Multi-platform mobile development",
+    "description": "",
+    "speakers": [7],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
+  },
+  {
+    "id": 303,
+    "title": "Agile Software Methodology",
+    "description": "",
+    "speakers": [8],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
+  }
+]

@@ -1,0 +1,193 @@
+[{
+    "id": 1,
+    "name": "Benoit Leseul",
+    "title": "",
+    "company": "Mozilla",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": ["Android"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 2,
+    "name": "Raphael de Robiano",
+    "title": "",
+    "company": "Ergonline",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": ["UX"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 3,
+    "name": "Karol Dulat",
+    "title": "",
+    "company": "Movify",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": ["UX"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 4,
+    "name": "Vincent",
+    "title": "",
+    "company": "Elbee",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": ["IoT"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 5,
+    "name": "Konrad Holubek",
+    "title": "",
+    "company": "Elbee",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": ["IoT"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 6,
+    "name": "David Habusha",
+    "title": "",
+    "company": "MyPermissions",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": ["Privacy"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 7,
+    "name": "Nick Trogh",
+    "title": "",
+    "company": "MIC Brussels",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": ["Tooling"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 8,
+    "name": "Philippe Guicheney",
+    "title": "",
+    "company": "Wemanita",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": ["Agile"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+}
+]
