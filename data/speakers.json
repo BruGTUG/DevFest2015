@@ -189,5 +189,53 @@
         "name": "GitHub",
         "link": ""
     }]
+},
+{
+    "id": 9,
+    "name": "Xavier Hallade",
+    "title": "RealSense",
+    "company": "Intel",
+    "country": "France",
+    "photoUrl": "http://lh4.googleusercontent.com/-AoPlZgdczEU/AAAAAAAAAAI/AAAAAAAAAKE/LVHTVq7HG8A/photo.jpg",
+    "bio": "Xavier Hallade is a software engineer at Intel Software and Services Group in Paris, France, where he works on a wide range of Android frameworks, libraries and applications, helping developers to improve their support for new hardware and technologies. He's a Google Developer Expert in Android, with a focus on the Android NDK and Android TV.",
+    "tags": ["VR"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": "http://ph0b.com/"
+    }, {
+        "name": "Twitter",
+        "link": "https://twitter.com/ph0b"
+    }, {
+        "name": "GitHub",
+        "link": "https://github.com/ph0b"
+    }]
+}, 
+{
+    "id": 10,
+    "name": "Jan Everaert",
+    "title": "Storydriven Code",
+    "company": "Crashlab",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": ["Code"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
 }
 ]
