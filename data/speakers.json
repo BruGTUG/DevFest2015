@@ -72,8 +72,8 @@
 },
 {
     "id": 4,
-    "name": "Vincent",
-    "title": "",
+    "name": "Vincent Canuel",
+    "title": "CTO",
     "company": "Elbee",
     "country": "Belgium",
     "photoUrl": "",
@@ -97,7 +97,7 @@
 {
     "id": 5,
     "name": "Konrad Holubek",
-    "title": "",
+    "title": "CEO",
     "company": "Elbee",
     "country": "Belgium",
     "photoUrl": "",
@@ -237,5 +237,27 @@
         "name": "GitHub",
         "link": ""
     }]
-}
+},
+{
+    "id": 11,
+    "name": "Remi Grumeau",
+    "title": "Full-stack developer",
+    "company": "InStore Solution",
+    "country": "France",
+    "photoUrl": "http://remi-grumeau.com/talks/presentation-firebase/images/remi-grumeau.jpg",
+    "bio": "Coding websites since 1999",
+    "tags": ["Web"],
+    "badges": [],
+    "socials": [{
+        "name": "Website",
+        "link": "http://www.remi-grumeau.com"
+    }, {
+        "name": "Twitter",
+        "link": "https://twitter.com/remi_grumeau"
+    }, {
+        "name": "GitHub",
+        "link": "https://github.com/remi-grumeau"
+    }]
+},
+
 ]

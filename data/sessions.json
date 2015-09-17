@@ -108,5 +108,15 @@
     "complexity": "Beginner",
     "presentation": "",
     "video": ""
+  },
+  {
+    "id": 306,
+    "title": "Introducing Firebase",
+    "description": "Firebase is a realtime backend service to build realtime softwares in a fraction of the time it used to take. Let see how it works!",
+    "speakers": [11],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "http://remi-grumeau.com/talks/presentation-firebase/#/",
+    "video": ""
   }
 ]
