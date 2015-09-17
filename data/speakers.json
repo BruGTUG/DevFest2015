@@ -249,6 +249,9 @@
     "tags": ["Web"],
     "badges": [],
     "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
         "name": "Website",
         "link": "http://www.remi-grumeau.com"
     }, {
@@ -258,6 +261,6 @@
         "name": "GitHub",
         "link": "https://github.com/remi-grumeau"
     }]
-},
+}
 
 ]
