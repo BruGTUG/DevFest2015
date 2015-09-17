@@ -42,17 +42,17 @@
   {
     "id": 201,
     "title": "WebVR Workshop",
-    "description": "",
+    "description": "Come experience Virtual Reality, build from scratch your own immersive environment (graphic, sound & interaction) and connect your world to others through the web!",
     "speakers": [],
     "language": "en",
     "complexity": "Beginner",
-    "presentation": "",
+    "presentation": "http://opentechschool-brussels.github.io/webVR-for-3D-graphics-and-music/",
     "video": ""
   },
   {
     "id": 202,
     "title": "Moonshot Sprint",
-    "description": "",
+    "description": "Work together with experts and peers to understand and getting closer to a solution for big problems.",
     "speakers": [],
     "language": "en",
     "complexity": "Beginner",
@@ -87,6 +87,36 @@
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
+    "video": ""
+  },
+  {
+    "id": 304,
+    "title": "RealSense SDK",
+    "description": "Devices with Intel® RealSense™ camera can recognize and respond to facial expressions and hand gestures, so you can interact with them more naturally. In this session you will learn how it works and what the SDK looks like.",
+    "speakers": [9],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
+  },
+  {
+    "id": 305,
+    "title": "Storydriven Code",
+    "description": "Having the user interact is one thing, but it's way more fun when there is a story, a promise behind it. To really propel a user, every program and interface should have this (hidden) meaning. This session includes the meaning of stories behind applications of a wide variety, and how to include them.",
+    "speakers": [10],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
+  },
+  {
+    "id": 306,
+    "title": "Introducing Firebase",
+    "description": "Firebase is a realtime backend service to build realtime softwares in a fraction of the time it used to take. Let see how it works!",
+    "speakers": [11],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "http://remi-grumeau.com/talks/presentation-firebase/#/",
     "video": ""
   }
 ]
