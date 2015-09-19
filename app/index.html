@@ -159,40 +159,28 @@
                             <footer-block></footer-block>
                         </section>
                         <section data-route="moonshotsprint">
-                            <hero-block class="section-shadow" style="background: #00BCD4; color: #fff;">
-                                <div class="top-section">
-                                    <div class="title-wrapper layout vertical-horizontal">
-                                        <div class="flex center-content-xs">
-                                        	<h3 class="self-end">Moonshot Sprint</h3>
-                                            <p class="slogan bold">Part of DevFest Belgium 2015. By GDG Brussels.</p>
-                                            <img class="logo" src="images/logo2.png" alt="GDG DevFest Belgium 2015">
-                                            <p class="dates bold">October 3, 12:00 - 19:00, Brussels</p>
-                                            <div class="links layout horizontal align-pb-block">
-                                                <a href="https://docs.google.com/forms/d/1sasbvqmd84rEvpAWU9Lxej7T0cEIlsb1dFl_-XQDe1U/viewform" target="_blank">
-                                                    <paper-button class="inverted" raised>
-                                                        Become a mentor
-                                                    </paper-button>
-                                                </a>
-                                                <a href="#pricetable">
-                                                    <paper-button class="inverted" raised>
-                                                        Register
-                                                    </paper-button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="flex relative right-section">
-                                            <!-- <iron-image class="fit" src="images/solveforx/moonshots-white.png" sizing="contain"></iron-image>
-                                        <google-youtube id="video" video-id="4PTPPEQU8CI" fluid="true" autohide="1" chromeless="true"></google-youtube>
-                                        --></div>
-                                        
-                                    </div>
+                            <video-top class="section-shadow" style="color: #fff;">
+                            	<h3 class="self-end">Moonshot Sprint</h3>
+                                <p class="bold">October 3, 13:00 - 18:00, Brussels. Part of DevFest Belgium 2015.</p>
+                                <img class="logo" src="images/logo2.png" alt="GDG DevFest Belgium 2015">
+                                <div class="links layout horizontal align-pb-block">
+                                    <a href="https://docs.google.com/forms/d/1sasbvqmd84rEvpAWU9Lxej7T0cEIlsb1dFl_-XQDe1U/viewform" target="_blank">
+                                        <paper-button class="inverted" raised>
+                                            Become a mentor
+                                        </paper-button>
+                                    </a>
+                                    <a href="#sprintpricetable">
+                                        <paper-button class="inverted" raised>
+                                            Register
+                                        </paper-button>
+                                    </a>
                                 </div>
                                 <!-- TODO: add href to calendar below -->
                                 <!-- <a href=""
                                 target="_blank" onclick="ga('send', 'add-event-to-calendar', 'button', 'click');">
                                     <paper-fab class="section-fab-right" icon="icons:event"></paper-fab>
                                 </a> -->
-                            </hero-block>
+                            </video-top>
                             <hero-block class="section-shadow" hide-logo hide-toolbar>
                                 <div class="top-section hero">
                                     <div class="layout vertical-horizontal">
@@ -200,13 +188,13 @@
                                             <p class="description bold">Who is <img class="logo" src="images/solveforx/sfx-logo-web-gray.png" style="width: 20%; height: 20%; vertical-align: middle" alt="Solve for X"> ?</p>
 											<p class="description">Solve for X is a global community that aims to surface brilliant scientific innovations and technological breakthroughs, that have the potential to solve big global problems facing humanity.</p>
 											<p class="description">We call these breakthrough projects, <b>‘Moonshots’</b>, and we define a Moonshot as an outlier solution to a complex problem that is enabled by science or technology.</p>
+                                            <br />
                                             <p class="description bold">What is the event about ?</p>
 											<p class="description">You are invited to contribute to developing an initial path to a solution for a posed problem. The structured format in which this is done is called a <b>‘Moonshot Sprint’</b>. We will provide you with the theme and more details after you have signed up. Mentors will be on hand to guide you, and you will work in teams.</p>
                                         </div>
                                         <div class="flex relative right-section">
                                             <iron-image class="fit" src="images/solveforx/moonshots-white.png" sizing="contain"></iron-image>
-                                        <!-- <google-youtube id="video" video-id="4PTPPEQU8CI" fluid="true" autohide="1" chromeless="true"></google-youtube>
-                                         --></div>
+                                        </div>
                                         
                                     </div>
                                 </div>
@@ -214,7 +202,10 @@
                             <featured-people source="data/mentors.json">
                                 <h4 class="heading">Mentors</h4>
                             </featured-people>
-                            <tickets-block></tickets-block>
+                            <sprinttickets-block></sprinttickets-block>
+                            <logos-block source="data/sprintpartners.json">
+                                <h4 class="heading">Partners</h4>
+                            </logos-block>
                             <footer-block></footer-block>
                         </section>
                         <!-- <section data-route="code-of-conduct">

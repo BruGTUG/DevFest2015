@@ -53,6 +53,13 @@
             document.querySelector('#people-block').closePerson();
         });
 
+        page('/#sprintpricetable', function() {
+            trackPageview('/#sprintpricetable');
+            app.route = 'home';
+            var pricetable = document.querySelector('#sprintpricetable');
+            app.smoothScroll(pricetable, 0);
+        });
+
         page('/moonshotsprint', function() {
             trackPageview('/moonshotsprint');
             app.route = 'moonshotsprint';
