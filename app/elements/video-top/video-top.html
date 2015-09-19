@@ -1,4 +1,4 @@
-<dom-module id="hero-block">
+<dom-module id="video-top">
     <template>
         <style>
             :host {
@@ -27,11 +27,11 @@
                 padding-bottom: 20px;
             }
 
-            ::content .hero {
+            .hero {
                 padding-bottom: 20px;
             }
 
-            ::content .top-section {
+            .top-section {
                 padding-top: 20px;
                 font-size: 20px;
             }
@@ -68,9 +68,16 @@
                 height: 100%;
             }
 
-            ::content .right-section {
+            .right-section {
                 margin-top: 20px;
                 height: 200px;
+            }
+
+            .fullvideo-container {
+                margin: 0;
+                padding: 0;
+                z-index: 6;
+                overflow: hidden;
             }
 
             @media (max-width: 767px) {
@@ -82,13 +89,13 @@
             }
 
             @media (min-width: 768px) {
-                ::content .hero {
+                .hero {
                     padding-top: 40px;
                 }
-                ::content .right-section {
+                .right-section {
                     height: initial;
                 }
-                ::content .title-wrapper {
+                .title-wrapper {
                     min-height: 150px;
                 }
             }
@@ -97,6 +104,7 @@
             <div class="container flex relative">
                 <paper-toolbar hidden="{{hideToolbar}}">
                     <paper-icon-button class="visible-xs" icon="menu" on-tap="togglePanel"></paper-icon-button>
+                    <paper-icon-button icon="icons:arrow-back" on-tap="closeVideoCard" hidden="{{!videoPlaying}}"></paper-icon-button>
                     <div class="flex hidden-xs">
                         <a data-route="home" href="/" hidden="{{hideLogo}}">
                             <img class="logo" src="../../images/logo_white.png" alt="GDG DevFest Belgium 2015">
@@ -117,7 +125,21 @@
                         </paper-tab> -->
                     </paper-tabs>
                 </paper-toolbar>
-                <content></content>
+                
+                <div class="top-section" hidden="{{videoPlaying}}">
+                    <div class="title-wrapper layout vertical-horizontal">
+                        <div class="flex center-content-xs">
+                			<content></content>
+                
+                    	</div>
+	            		<div class="flex relative right-section">
+	            		    <paper-button class="white" on-tap="playVideo">Watch video</paper-button>
+                    	</div>
+                    </div>
+                </div>
+	            <div class="fullvideo-container fit" hidden="{{!videoPlaying}}">
+	                <google-youtube id="video" video-id="nuO5aSpGZw8" fluid="true" autohide="1" chromeless="true"></google-youtube>
+	            </div>
             </div>
         </div>
     </template>
@@ -129,11 +151,23 @@
         properties: {
             hideLogo: Boolean,
             hideToolbar: Boolean,
+            videoPlaying: Boolean,
             route: {
                 type: String,
                 notify: true
             }
         },
+        playVideo: function() {
+            ga('send', 'play-solveforx-video', 'button', 'click'); // jshint ignore:line
+
+            videoPlaying = true;
+            this.$.video.play();
+        },
+        closeVideoCard: function() {
+            videoPlaying = false;
+            this.$.video.pause();
+            this.$.video.seekTo(0);
+        }
         togglePanel: function() {
             document.querySelector('#paperDrawerPanel').togglePanel();
         }

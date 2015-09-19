@@ -53,6 +53,22 @@
             document.querySelector('#people-block').closePerson();
         });
 
+        page('/moonshotsprint', function() {
+            trackPageview('/moonshotsprint');
+            app.route = 'moonshotsprint';
+        });
+
+        /*page('/moonshotsprint/:id', function(data) {
+            trackPageview('/moonshotsprint/' + data.params.id);
+            app.route = 'moonshotsprint';
+            app.params = data.params;
+            app.scrollToTop();
+        });*/
+
+        /*page.exit('/moonshotsprint/:id', function() {
+            document.querySelector('#people-block').closePerson();
+        });*/
+
         page('/contact', function() {
             trackPageview('/contact');
             app.route = 'contact';
