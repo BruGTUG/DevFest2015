@@ -19904,6 +19904,29 @@ module.exports = Array.isArray || function (arr) {
             document.querySelector('#people-block').closePerson();
         });
 
+        page('/#sprintpricetable', function() {
+            trackPageview('/#sprintpricetable');
+            app.route = 'home';
+            var pricetable = document.querySelector('#sprintpricetable');
+            app.smoothScroll(pricetable, 0);
+        });
+
+        page('/moonshotsprint', function() {
+            trackPageview('/moonshotsprint');
+            app.route = 'moonshotsprint';
+        });
+
+        /*page('/moonshotsprint/:id', function(data) {
+            trackPageview('/moonshotsprint/' + data.params.id);
+            app.route = 'moonshotsprint';
+            app.params = data.params;
+            app.scrollToTop();
+        });*/
+
+        /*page.exit('/moonshotsprint/:id', function() {
+            document.querySelector('#people-block').closePerson();
+        });*/
+
         page('/contact', function() {
             trackPageview('/contact');
             app.route = 'contact';
@@ -30003,7 +30026,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <div id="hero">
             <div class="container flex relative">
-                <paper-toolbar>
+                <paper-toolbar hidden="{{hideToolbar}}">
                     <paper-icon-button class="visible-xs" icon="menu" on-tap="togglePanel"></paper-icon-button>
                     <div class="flex hidden-xs">
                         <a data-route="home" href="/" hidden="{{hideLogo}}">
@@ -30016,6 +30039,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </paper-tab>
                         <paper-tab class="text-u-c">
                             <a data-route="speakers" href="#!/speakers" class="nav-link horizontal center-center layout">Speakers</a>
+                        </paper-tab>
+                        <paper-tab class="text-u-c" style="width: 300px;">
+                            <a data-route="moonshotsprint" href="#!/moonshotsprint" class="nav-link horizontal center-center layout">Moonshot Sprint</a>
                         </paper-tab>
                         <!-- <paper-tab class="text-u-c">
                             <a data-route="contact" href="#!/contact" class="nav-link horizontal center-center layout">Contact</a>
@@ -30033,6 +30059,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'hero-block',
         properties: {
             hideLogo: Boolean,
+            hideToolbar: Boolean,
             route: {
                 type: String,
                 notify: true
@@ -32928,6 +32955,135 @@ Polymer({
         }
     });
 </script>
+<dom-module id="sprinttickets-block" assetpath="sprinttickets-block/">
+    <template>
+        <style>
+            :host {
+                display: block;
+                background: var(--default-primary-color);
+                color: #fff;
+            }
+
+            .container {
+                padding-bottom: 35px;
+            }
+
+            .price-block-wrapper {
+                margin-top: 20px;
+            }
+
+            .ticket-name {
+                margin-bottom: -5px;
+                font-size: 30px;
+            }
+
+            .price-block {
+                margin-bottom: 15px;
+            }
+
+            .currency {
+                margin-top: 21px;
+                display: inline-block;
+                vertical-align: top;
+            }
+
+            .price {
+                font-size: 70px;
+            }
+
+            .details {
+                margin-top: 10px;
+                font-size: 14px;
+            }
+
+            .additional-info {
+                margin-top: -5px;
+                font-size: 13px;
+            }
+
+            .open-dialog-button {
+                margin-top: 30px;
+            }
+
+            paper-dialog {
+                background: #fff;
+            }
+
+            @media (min-height: 400px) {
+                paper-dialog {
+                    min-height: 380px;
+                }
+            }
+
+            paper-dialog .buttons {
+                color: initial;
+            }
+        </style>
+        <div id="sprintpricetable" class="container wrap relative layout vertical text-center">
+            <h4 class="heading">Tickets will be available soon</h4>
+            <!-- TODO: ticketing
+            <h4 class="heading">Tickets</h4>
+            <div class="price-block-wrapper flex layout vertical-horizontal">
+                <div class="price-block flex text-center">
+                    <span class="ticket-name block">Student</span>
+                    <span class="price">400</span>
+                    <span class="currency">UAH</span>
+                    <span class="additional-info block">*Before October 23 or 100 tickets.
+                        <br/>Requires valid student ID</span>
+                </div>
+                <div class="price-block flex text-center">
+                    <span class="ticket-name block">Early Bird</span>
+                    <span class="price">600</span>
+                    <span class="currency">UAH</span>
+                    <span class="additional-info block">*Before September 27 or 150 tickets</span>
+                </div>
+                <div class="price-block flex text-center">
+                    <span class="ticket-name block">Lazy Bird</span>
+                    <span class="price">800</span>
+                    <span class="currency">UAH</span>
+                    <span class="additional-info block">*Before October 23</span>
+                </div>
+            </div>
+            <span class="details">Tickets grant access to all conference sections, coffee breaks, lunch and party. Accommodation is NOT included in the ticket price.</span>
+            <div class="flex">
+                <paper-button class="white border-button open-dialog-button" on-tap="openTicketsDialog">Buy a ticket</paper-button>
+            </div> -->
+        </div>
+        <paper-dialog id="ticketsDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" modal="">
+                <div id="2event_tickets_widget" style="width: 640px; height: 300px; background:#fff;"></div>
+            <div class="buttons">
+                <a href="http://2event.com/events/312113" target="_blank">
+                    <paper-button>Buy on the website</paper-button>
+                </a>
+                <paper-button dialog-confirm="">Close</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+</dom-module>
+<script>
+    /* jshint ignore:start */
+    var widgetOptions = {
+        bg_color: 'ffffff',
+        id: 312113,
+        lang: 'en'
+    };
+    /* jshint ignore:end */
+    (function() {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.async = true;
+        script.src = 'http://2event.com/js/widget-tickets.js';
+        document.getElementsByTagName('head')[0].appendChild(script);
+    })();
+
+    Polymer({
+        is: 'sprinttickets-block',
+        openTicketsDialog: function() {
+            ga('send', 'buy-a-ticket', 'button', 'click'); // jshint ignore:line
+            this.$.ticketsDialog.open();
+        }
+    });
+</script>
 <dom-module id="cod-block" assetpath="cod-block/">
     <template>
         <style>
@@ -32977,5 +33133,202 @@ Polymer({
         source: String
     }
 });
+</script>
+<dom-module id="video-top" assetpath="video-top/">
+    <template>
+        <style>
+            :host {
+                display: block;
+                --paper-toolbar-background: transparent;
+                --paper-tab-ink: rgba(255, 255, 255, 0.2);
+                --paper-toolbar-color: inherit;
+                --paper-toolbar: {
+                    margin: 0 -16px;
+                    background: none;
+				    box-shadow: none;
+				    position: absolute;
+				    z-index: 99999;
+				    width: 100%;
+                };
+                background: none;
+                background-image: url("../images/solveforx/chart.jpg");
+                color: #4E4E4E;
+            }
+
+            .nav-link {
+                color: inherit;
+            }
+
+            .logo {
+                margin-top: 7px;
+                height: 40px;
+            }
+
+            .container {
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+
+            .hero {
+                padding-bottom: 20px;
+            }
+            
+            #hero {
+                background-image: url("../images/solveforx/banner-fade.png");
+            }
+
+            .top-section {
+                padding-top: 80px;
+                font-size: 20px;
+                padding-bottom: 20px;
+            }
+
+            ::content h3 {
+                font-size: 2.1em;
+            }
+
+            ::content .logo {
+                height: 100px;
+                max-width: 100%;
+            }
+
+            ::content .slogan,
+            ::content .dates {
+                margin-top: 20px;
+                font-size: 17px;
+                font-weight: 400;
+                text-transform: uppercase;
+                letter-spacing: .09em;
+                line-height: 1;
+            }
+
+            ::content .description {
+                margin-top: 20px;
+            }
+
+            ::content .links {
+                margin: 10px 0 10px;
+            }
+
+            ::content .event-image {
+                width: 100%;
+                height: 100%;
+            }
+
+            .right-section {
+                margin-top: 20px;
+                height: 200px;
+            }
+
+            .fullvideo-container {
+                margin: 0;
+                padding: 0;
+                z-index: 6;
+                overflow: hidden;
+                height: 720px;
+            }
+
+            @media (max-width: 767px) {
+                .center-content-xs {
+                    @apply(--layout-vertical);
+                    @apply(--layout-center);
+                    text-align: center;
+                }
+            }
+
+            @media (min-width: 768px) {
+                .hero {
+                    padding-top: 40px;
+                }
+                .right-section {
+                    height: initial;
+                }
+                .title-wrapper {
+                    min-height: 150px;
+                }
+            }
+        </style>
+        <div id="hero">
+            <div class="container flex relative">
+                <paper-toolbar hidden="{{hideToolbar}}">
+                    <paper-icon-button class="visible-xs" icon="menu" on-tap="togglePanel"></paper-icon-button>
+                    <paper-icon-button icon="icons:arrow-back" on-tap="closeVideoCard" hidden="{{!videoPlaying}}"></paper-icon-button>
+                    <div class="flex hidden-xs">
+                        <a data-route="home" href="/" hidden="{{hideLogo}}">
+                            <img class="logo" src="../images/logo_white.png" alt="GDG DevFest Belgium 2015">
+                        </a>
+                    </div>
+                    <paper-tabs class="hidden-xs" attr-for-selected="data-route" selected="{{route}}">
+                        <paper-tab class="text-u-c">
+                            <a data-route="blog" href="#!/blog" class="nav-link horizontal center-center layout">Blog</a>
+                        </paper-tab>
+                        <paper-tab class="text-u-c">
+                            <a data-route="speakers" href="#!/speakers" class="nav-link horizontal center-center layout">Speakers</a>
+                        </paper-tab>
+                        <paper-tab class="text-u-c" style="width: 300px;">
+                            <a data-route="moonshotsprint" href="#!/moonshotsprint" class="nav-link horizontal center-center layout">Moonshot Sprint</a>
+                        </paper-tab>
+                        <!-- <paper-tab class="text-u-c">
+                            <a data-route="contact" href="#!/contact" class="nav-link horizontal center-center layout">Contact</a>
+                        </paper-tab> -->
+                    </paper-tabs>
+                </paper-toolbar>
+                <iron-pages selected="{{selected}}">
+	                <div class="top-section">
+	                    <div class="title-wrapper layout vertical-horizontal">
+	                        <div class="flex center-content-xs">
+	                			<content></content>
+	                
+	                    	</div>
+		            		<div class="flex relative layout horizontal center center-justified right-section" style="text-align: center;">
+		            		    <paper-button class="inverted" raised="" on-tap="playVideo"><iron-icon icon="av:play-arrow"></iron-icon>Watch video</paper-button>
+	                    	</div>
+	                    </div>
+	                </div>
+		            <div class="fullvideo-container">
+		                <google-youtube id="video" video-id="4PTPPEQU8CI" fluid="true" autohide="1" chromeless="true"></google-youtube>
+		            </div>
+		        </iron-pages>
+            </div>
+        </div>
+    </template>
+</dom-module>
+
+<script>
+    Polymer({
+        is: 'video-top',
+        properties: {
+            hideLogo: Boolean,
+            hideToolbar: Boolean,
+            videoPlaying: {
+            	type: Boolean,
+            	value: false
+            },
+            selected: {
+            	type: Number,
+            	value: 0
+            },
+            route: {
+                type: String,
+                notify: true
+            }
+        },
+        playVideo: function() {
+            ga('send', 'play-solveforx-video', 'button', 'click'); // jshint ignore:line
+
+            this.videoPlaying = true;
+            this.selected = 1;
+            this.$.video.play();
+        },
+        closeVideoCard: function() {
+            this.videoPlaying = false;
+            this.selected = 0;
+            this.$.video.pause();
+            this.$.video.seekTo(0);
+        },
+        togglePanel: function() {
+            document.querySelector('#paperDrawerPanel').togglePanel();
+        }
+    });
 </script>
 </div></body></html>
