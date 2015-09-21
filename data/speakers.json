@@ -49,25 +49,19 @@
 {
     "id": 3,
     "name": "Karol Dulat",
-    "title": "",
+    "title": "UX Consultant",
     "company": "Movify",
-    "country": "Belgium",
+    "country": "Belgium/Poland",
     "photoUrl": "",
-    "bio": "",
+    "bio": "Karol is a UX Designer for digital products and services, specialising in convergent solutions for multiple platforms (mobile-web-TV). He has a strong background in usability engineering, information architecture and interaction design. With his experience he provided UX solutions for various clients in USA and Europe, from small business to organisations and Fortune 500 companies.  He designed for Time Warner, Washington Post, ING, BNP Paribas Fortis, Mars, Proximus to name just few. In 2014 he joined Movify.be where he continues to design UX solutions.",
     "tags": ["UX"],
     "badges": [],
     "socials": [{
-        "name": "Google+",
-        "link": ""
-    }, {
-        "name": "Website",
-        "link": ""
+        "name": "LinkedIn",
+        "link": "be.linkedin.com/in/karoldulat"
     }, {
         "name": "Twitter",
-        "link": ""
-    }, {
-        "name": "GitHub",
-        "link": ""
+        "link": "twitter.com/karoldulat"
     }]
 },
 {

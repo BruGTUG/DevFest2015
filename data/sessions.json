@@ -21,11 +21,11 @@
   },
   {
     "id": 103,
-    "title": "UX for animations on mobile",
-    "description": "",
+    "title": "UX of animations and transitions in mobile apps.",
+    "description": "Why do we need animations in mobile applications? What are the principles and advantages? How to do animations and transitions correctly?",
     "speakers": [3],
     "language": "en",
-    "complexity": "Beginner",
+    "complexity": "Beginner - Medium",
     "presentation": "",
     "video": ""
   },
