@@ -195,9 +195,6 @@
     "tags": ["VR"],
     "badges": [],
     "socials": [{
-        "name": "Google+",
-        "link": ""
-    }, {
         "name": "Website",
         "link": "http://ph0b.com/"
     }, {
@@ -207,7 +204,7 @@
         "name": "GitHub",
         "link": "https://github.com/ph0b"
     }]
-}, 
+},
 {
     "id": 10,
     "name": "Jan Everaert",
@@ -243,9 +240,6 @@
     "tags": ["Web"],
     "badges": [],
     "socials": [{
-        "name": "Google+",
-        "link": ""
-    }, {
         "name": "Website",
         "link": "http://www.remi-grumeau.com"
     }, {
@@ -254,6 +248,30 @@
     }, {
         "name": "GitHub",
         "link": "https://github.com/remi-grumeau"
+    }]
+},
+{
+    "id": 12,
+    "name": "Bart Jansen",
+    "title": "Professor",
+    "company": "",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": ["Mentors"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
     }]
 }
 

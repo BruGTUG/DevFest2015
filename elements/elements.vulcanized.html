@@ -19904,13 +19904,6 @@ module.exports = Array.isArray || function (arr) {
             document.querySelector('#people-block').closePerson();
         });
 
-        page('/#sprintpricetable', function() {
-            trackPageview('/#sprintpricetable');
-            app.route = 'home';
-            var pricetable = document.querySelector('#sprintpricetable');
-            app.smoothScroll(pricetable, 0);
-        });
-
         page('/moonshotsprint', function() {
             trackPageview('/moonshotsprint');
             app.route = 'moonshotsprint';
@@ -30706,7 +30699,7 @@ Polymer({
                     <div class="flex link-block-wrapper">
                         <span class="link-block-title block">Contact us</span>
                         <ul class="link-block">
-                            <li><a href="mailto:pjv@gtugs.org">pjv at gtugs dot org</a></li>
+                            <li><a href="mailto:contact@gdg.brussels?subject=Question about DevFest 2015 - via website">contact@gdg.brussels</a></li>
                         </ul>
                         <!-- <div class="icons-wrapper align-pb-block">
                             <a href="https://plus.google.com/102444623953913144164" target="_blank">
@@ -32891,44 +32884,39 @@ Polymer({
             }
         </style>
         <div id="pricetable" class="container wrap relative layout vertical text-center">
-            <h4 class="heading">Tickets will be available soon</h4>
-            <!-- TODO: ticketing
             <h4 class="heading">Tickets</h4>
             <div class="price-block-wrapper flex layout vertical-horizontal">
                 <div class="price-block flex text-center">
-                    <span class="ticket-name block">Student</span>
-                    <span class="price">400</span>
-                    <span class="currency">UAH</span>
-                    <span class="additional-info block">*Before October 23 or 100 tickets.
-                        <br/>Requires valid student ID</span>
+                    <span class="ticket-name block">Saturday</span>
+                    <span class="price">5</span>
+                    <span class="currency">EUR</span>
+                    <span class="additional-info block">*Before October 2 or 100 tickets.</span><br>
+                	<a href="http://www.meetup.com/gdg-brussels/events/225473520/" target="_blank">
+                    	<paper-button class="white border-button">Buy ticket</paper-button>
+                	</a>
                 </div>
                 <div class="price-block flex text-center">
-                    <span class="ticket-name block">Early Bird</span>
-                    <span class="price">600</span>
-                    <span class="currency">UAH</span>
-                    <span class="additional-info block">*Before September 27 or 150 tickets</span>
+                    <span class="ticket-name block">Sunday</span>
+                    <span class="price">5</span>
+                    <span class="currency">EUR</span>
+                    <span class="additional-info block">*Before October 2 or 100 tickets.</span><br>
+                	<a href="http://www.meetup.com/gdg-brussels/events/225473561/" target="_blank">
+                    	<paper-button class="white border-button">Buy ticket</paper-button>
+                	</a>                
                 </div>
                 <div class="price-block flex text-center">
-                    <span class="ticket-name block">Lazy Bird</span>
-                    <span class="price">800</span>
-                    <span class="currency">UAH</span>
-                    <span class="additional-info block">*Before October 23</span>
+                    <span class="ticket-name block">Moonshot Sprint</span>
+                    <span class="price">1</span>
+                    <span class="currency">EUR</span>
+                    <span class="additional-info block">*Before October 2 or 25 tickets. Reserved for those interested in the Moonshot Sprint, preferably on top of the Saturday ticket.</span><br>
+                	<a href="http://www.meetup.com/gdg-brussels/events/225473584/" target="_blank">
+                    	<paper-button class="white border-button">Buy ticket</paper-button>
+                	</a>                
                 </div>
             </div>
-            <span class="details">Tickets grant access to all conference sections, coffee breaks, lunch and party. Accommodation is NOT included in the ticket price.</span>
-            <div class="flex">
-                <paper-button class="white border-button open-dialog-button" on-tap="openTicketsDialog">Buy a ticket</paper-button>
-            </div> -->
+            <span class="details">The €5 Saturday and Sunday tickets grant access to all conference sections, including tech talks, workshops, code labs, coffee breaks, breakfast and lunch; excluding the Moonshot Sprint.<br>
+            We handle our tickets through Meetup.com and Paypal. Be sure to leave your email address with us.</span>
         </div>
-        <paper-dialog id="ticketsDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" modal="">
-                <div id="2event_tickets_widget" style="width: 640px; height: 300px; background:#fff;"></div>
-            <div class="buttons">
-                <a href="http://2event.com/events/312113" target="_blank">
-                    <paper-button>Buy on the website</paper-button>
-                </a>
-                <paper-button dialog-confirm="">Close</paper-button>
-            </div>
-        </paper-dialog>
     </template>
 </dom-module>
 <script>
@@ -32949,135 +32937,6 @@ Polymer({
 
     Polymer({
         is: 'tickets-block',
-        openTicketsDialog: function() {
-            ga('send', 'buy-a-ticket', 'button', 'click'); // jshint ignore:line
-            this.$.ticketsDialog.open();
-        }
-    });
-</script>
-<dom-module id="sprinttickets-block" assetpath="sprinttickets-block/">
-    <template>
-        <style>
-            :host {
-                display: block;
-                background: var(--default-primary-color);
-                color: #fff;
-            }
-
-            .container {
-                padding-bottom: 35px;
-            }
-
-            .price-block-wrapper {
-                margin-top: 20px;
-            }
-
-            .ticket-name {
-                margin-bottom: -5px;
-                font-size: 30px;
-            }
-
-            .price-block {
-                margin-bottom: 15px;
-            }
-
-            .currency {
-                margin-top: 21px;
-                display: inline-block;
-                vertical-align: top;
-            }
-
-            .price {
-                font-size: 70px;
-            }
-
-            .details {
-                margin-top: 10px;
-                font-size: 14px;
-            }
-
-            .additional-info {
-                margin-top: -5px;
-                font-size: 13px;
-            }
-
-            .open-dialog-button {
-                margin-top: 30px;
-            }
-
-            paper-dialog {
-                background: #fff;
-            }
-
-            @media (min-height: 400px) {
-                paper-dialog {
-                    min-height: 380px;
-                }
-            }
-
-            paper-dialog .buttons {
-                color: initial;
-            }
-        </style>
-        <div id="sprintpricetable" class="container wrap relative layout vertical text-center">
-            <h4 class="heading">Tickets will be available soon</h4>
-            <!-- TODO: ticketing
-            <h4 class="heading">Tickets</h4>
-            <div class="price-block-wrapper flex layout vertical-horizontal">
-                <div class="price-block flex text-center">
-                    <span class="ticket-name block">Student</span>
-                    <span class="price">400</span>
-                    <span class="currency">UAH</span>
-                    <span class="additional-info block">*Before October 23 or 100 tickets.
-                        <br/>Requires valid student ID</span>
-                </div>
-                <div class="price-block flex text-center">
-                    <span class="ticket-name block">Early Bird</span>
-                    <span class="price">600</span>
-                    <span class="currency">UAH</span>
-                    <span class="additional-info block">*Before September 27 or 150 tickets</span>
-                </div>
-                <div class="price-block flex text-center">
-                    <span class="ticket-name block">Lazy Bird</span>
-                    <span class="price">800</span>
-                    <span class="currency">UAH</span>
-                    <span class="additional-info block">*Before October 23</span>
-                </div>
-            </div>
-            <span class="details">Tickets grant access to all conference sections, coffee breaks, lunch and party. Accommodation is NOT included in the ticket price.</span>
-            <div class="flex">
-                <paper-button class="white border-button open-dialog-button" on-tap="openTicketsDialog">Buy a ticket</paper-button>
-            </div> -->
-        </div>
-        <paper-dialog id="ticketsDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" modal="">
-                <div id="2event_tickets_widget" style="width: 640px; height: 300px; background:#fff;"></div>
-            <div class="buttons">
-                <a href="http://2event.com/events/312113" target="_blank">
-                    <paper-button>Buy on the website</paper-button>
-                </a>
-                <paper-button dialog-confirm="">Close</paper-button>
-            </div>
-        </paper-dialog>
-    </template>
-</dom-module>
-<script>
-    /* jshint ignore:start */
-    var widgetOptions = {
-        bg_color: 'ffffff',
-        id: 312113,
-        lang: 'en'
-    };
-    /* jshint ignore:end */
-    (function() {
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.async = true;
-        script.src = 'http://2event.com/js/widget-tickets.js';
-        document.getElementsByTagName('head')[0].appendChild(script);
-    })();
-
-    Polymer({
-        is: 'sprinttickets-block',
         openTicketsDialog: function() {
             ga('send', 'buy-a-ticket', 'button', 'click'); // jshint ignore:line
             this.$.ticketsDialog.open();
