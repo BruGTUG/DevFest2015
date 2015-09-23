@@ -7,7 +7,14 @@
             "logoUrl": "../images/partners/google.svg"
         }]
     }, {
-        "title": "Information partners",
+        "title": "Location host",
+        "logos": [{
+            "name": "Famoco",
+            "url": "",
+            "logoUrl": "../images/partners/famoco.jpg"
+        }]
+    }, {
+        "title": "Information partner",
         "logos": [{
             "name": "MIC Brussels",
             "url": "",
