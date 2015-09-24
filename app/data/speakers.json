@@ -67,49 +67,40 @@
 {
     "id": 4,
     "name": "Vincent Canuel",
-    "title": "CTO",
+    "title": "Co-Founder & CTO",
     "company": "Elbee",
     "country": "Belgium",
-    "photoUrl": "",
-    "bio": "",
+    "photoUrl": "../images/speakers/vcanuel.jpg",
+    "bio": "Vincent Canuel holds a master's degree in computer science. He is in charge of software and electronic development for the Elbee. He has over 7 years of experience as software developer and he loves to tinker with smart devices and electronics.",
     "tags": ["IoT"],
     "badges": [],
     "socials": [{
-        "name": "Google+",
-        "link": ""
-    }, {
-        "name": "Website",
-        "link": ""
+        "name": "Elbee",
+        "link": "https://getelbee.com/"
     }, {
         "name": "Twitter",
-        "link": ""
-    }, {
-        "name": "GitHub",
-        "link": ""
+        "link": "https://twitter.com/canvin"
     }]
 },
 {
     "id": 5,
     "name": "Konrad Holubek",
-    "title": "CEO",
+    "title": "Co-Founder & CEO",
     "company": "Elbee",
     "country": "Belgium",
-    "photoUrl": "",
-    "bio": "",
+    "photoUrl": "../images/speakers/kholubek.jpg",
+    "bio": "Konrad Holubek graduated from France's number one business school. He is in charge of business development and finance for the Elbee. He has over 10 years of professional experience and a previous experience as an entrepreneur (martialadventures.com).",
     "tags": ["IoT"],
     "badges": [],
     "socials": [{
-        "name": "Google+",
-        "link": ""
+        "name": "Elbee",
+        "link": "https://getelbee.com/"
     }, {
         "name": "Website",
-        "link": ""
+        "link": "konradholubek.com"
     }, {
         "name": "Twitter",
-        "link": ""
-    }, {
-        "name": "GitHub",
-        "link": ""
+        "link": "https://twitter.com/KonradHolubek"
     }]
 },
 {
