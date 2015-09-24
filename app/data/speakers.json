@@ -162,26 +162,20 @@
 },
 {
     "id": 8,
-    "name": "Philippe Guicheney",
-    "title": "",
-    "company": "Wemanita",
+    "name": "Artur Margonari",
+    "title": "Agile Coach",
+    "company": "Wemanity",
     "country": "Belgium",
-    "photoUrl": "",
-    "bio": "",
+    "photoUrl": "https://media.licdn.com/media/p/2/005/042/2c8/20d2eb3.jpg",
+    "bio": "Artur is an Agile Coach at Wemanity in Brussels, Belgium.",
     "tags": ["Agile"],
     "badges": [],
     "socials": [{
-        "name": "Google+",
-        "link": ""
+        "name": "LinkedIn",
+        "link": "https://be.linkedin.com/in/arturmargonari"
     }, {
-        "name": "Website",
-        "link": ""
-    }, {
-        "name": "Twitter",
-        "link": ""
-    }, {
-        "name": "GitHub",
-        "link": ""
+        "name": "Facebook",
+        "link": "https://www.facebook.com/arturmargonari"
     }]
 },
 {
