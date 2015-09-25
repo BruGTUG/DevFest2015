@@ -4,7 +4,7 @@
     "title": "",
     "company": "Mozilla",
     "country": "Belgium",
-    "photoUrl": "",
+    "photoUrl": "https://media.licdn.com/media/p/2/005/08e/3ec/28d610d.jpg",
     "bio": "",
     "tags": ["Android"],
     "badges": [],
@@ -266,6 +266,30 @@
     "company": "Philos",
     "country": "Belgium",
     "photoUrl": "https://philos.io/img/team/team_davy.jpg",
+    "bio": "",
+    "tags": ["Web", "React"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": "https://twitter.com/davyengone"
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 15,
+    "name": "Yannick Lemin",
+    "title": "Freelance",
+    "company": "TechYOS",
+    "country": "Belgium",
+    "photoUrl": "../images/speakers/yannick.jpg",
     "bio": "",
     "tags": ["Web", "React"],
     "badges": [],
