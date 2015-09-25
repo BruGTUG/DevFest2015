@@ -118,5 +118,17 @@
     "complexity": "Beginner",
     "presentation": "http://remi-grumeau.com/talks/presentation-firebase/#/",
     "video": ""
+  },
+  {
+    "id": 307,
+    "title": "Understanding React: Learn once, run everywhere",
+    "description": "React is a JavaScript library for building user interfaces that run natively in their environment.
+By understanding the main concepts behind React, you will be able to build native applications
+on the web and on mobile using the same techniques: Learn once and run everywhere.",
+    "speakers": [13],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
   }
 ]

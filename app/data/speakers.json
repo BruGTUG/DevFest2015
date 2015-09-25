@@ -258,6 +258,29 @@
         "name": "GitHub",
         "link": ""
     }]
+},
+{
+    "id": 13,
+    "name": "Davy Egone",
+    "title": "Partner & Software Engineer",
+    "company": "Philos",
+    "country": "Belgium",
+    "photoUrl": "https://philos.io/img/team/team_davy.jpg",
+    "bio": "",
+    "tags": ["Web", "React"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": "https://twitter.com/davyengone"
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
 }
-
 ]
