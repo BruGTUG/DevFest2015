@@ -4,7 +4,7 @@
     "title": "",
     "company": "Mozilla",
     "country": "Belgium",
-    "photoUrl": "",
+    "photoUrl": "https://media.licdn.com/media/p/2/005/08e/3ec/28d610d.jpg",
     "bio": "",
     "tags": ["Android"],
     "badges": [],
@@ -130,8 +130,8 @@
 {
     "id": 7,
     "name": "Nick Trogh",
-    "title": "",
-    "company": "MIC Brussels",
+    "title": "Technical Evangelist",
+    "company": "Microsoft",
     "country": "Belgium",
     "photoUrl": "",
     "bio": "",
@@ -258,6 +258,78 @@
         "name": "GitHub",
         "link": ""
     }]
+},
+{
+    "id": 13,
+    "name": "Davy Egone",
+    "title": "Partner & Software Engineer",
+    "company": "Philos",
+    "country": "Belgium",
+    "photoUrl": "https://philos.io/img/team/team_davy.jpg",
+    "bio": "",
+    "tags": ["Web", "React"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": "https://twitter.com/davyengone"
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 14,
+    "name": "Yannick Lemin",
+    "title": "Freelance",
+    "company": "TechYOS",
+    "country": "Belgium",
+    "photoUrl": "../images/speakers/yannick.jpg",
+    "bio": "",
+    "tags": ["IoT"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 15,
+    "name": "Juarez Filho",
+    "title": "Front-end developer, GDG organizer",
+    "company": "",
+    "country": "",
+    "photoUrl": "",
+    "bio": "Juarez Filho is an enthusiastic Front end Engineer with over 7 years of experience, started his career as backend developer, but with his first CSS class he devoted completely to Front End and UX.
+Currently building things with love at @madewithlove and also a GDG Organizer spreading the awesome Google Technologies mainly Firebase and web related topics.",
+    "tags": ["Web", "Firebase", "Polymer"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
 }
-
 ]
