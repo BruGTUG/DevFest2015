@@ -320,6 +320,10 @@
                     }
                 }
             }
+
+            peopleTemp.sort(function(p1, p2){
+              return p1.name.localeCompare(p2.name);
+            });
             this.people = peopleTemp;
 
             this._generateFilters();
