@@ -330,6 +330,30 @@
         "name": "GitHub",
         "link": ""
     }]
+},
+{
+    "id": 16,
+    "name": "Benjamin Monjoie",
+    "title": "Android Developer",
+    "company": "Emakina",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": ["Android"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
 }
 
 ]
