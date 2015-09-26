@@ -130,5 +130,25 @@ on the web and on mobile using the same techniques: Learn once and run everywher
     "complexity": "Beginner",
     "presentation": "",
     "video": ""
+  },
+  {
+    "id": 308,
+    "title": "Eddystone - Beacons",
+    "description": "Introduction to Eddystone and Google's Becaon platform",
+    "speakers": [14],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
+  },
+  {
+    "id": 309,
+    "title": "Polymer & Firebase - Realtime and Web Components Adventures",
+    "description": "Polymer and Web Components is providing a new way to build web applications. In this talk we'll cover how you store your data, handle user authentication, deploy your app and much more using Polymer Starter Kit and Firebase.",
+    "speakers": [15],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": ""
   }
 ]
