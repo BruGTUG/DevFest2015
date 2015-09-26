@@ -37,6 +37,11 @@
             document.querySelector('#blog').closePost();
         });
 
+        page('/schedule', function() {
+            trackPageview('/schedule');
+            app.route = 'schedule';
+        });
+
         page('/speakers', function() {
             trackPageview('/speakers');
             app.route = 'speakers';
@@ -80,13 +85,13 @@
             app.route = 'code-of-conduct';
             app.scrollToTop();
         });
-        
+
         //Change base for subfolders
         //page.base('/dist');
         /*var str = window.location.pathname;
        	str = str.substring(0, str.length - 1);
         page.base(str);*/
-        
+
         page({
             hashbang: true
         });
