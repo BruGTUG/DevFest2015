@@ -41,7 +41,7 @@
                 padding: 16px 10px 0;
             }
 
-            .person-description {
+            .session-description {
                 padding-top: 0;
             }
 
@@ -50,7 +50,7 @@
                 font-size: 14px;
             }
 
-            .person-tags {
+            .session-tags {
                 margin-bottom: 10px;
                 padding-top: 0;
                 padding-bottom: 0;
@@ -67,17 +67,17 @@
                 margin-left: 5px;
             }
 
-            .session {
+            .speaker {
                 padding: 20px 0;
                 border-top: 1px solid #e8e8e8;
             }
 
-            .session-meta {
+            .speaker-meta {
                 margin-right: 10px;
                 font-size: 14px;
             }
 
-            .session-title {
+            .speaker-title {
                 font-size: 22px;
                 font-weight: 400;
             }
@@ -86,13 +86,13 @@
                 paper-card {
                     width: 70%;
                 }
-                .person-img {
+                .session-img {
                     height: 130px;
                     width: 130px;
                     margin-top: -70px;
                     border: 2px solid #fff;
                 }
-                .person-detail {
+                .session-detail {
                     margin-top: -10px;
                     margin-left: 15px;
                 }
@@ -109,101 +109,72 @@
             <paper-card>
                 <div class="paper-card-container">
                     <div class="card-content layout horizontal">
-                        <iron-image src="[[person.photoUrl]]" class="person-img placeholder-color img-circle" preload fade sizing="cover"></iron-image>
-                        <div class="person-detail flex layout vertical center-center">
-                            <span class="name self-start">[[person.name]]</span>
+                        <div class="session-detail flex layout vertical center-center">
+                            <span class="name self-start">[[session.title]]</span>
                             <div class="title self-start">
-                                <span>[[person.title]]</span>,
-                                <span>[[person.company]]</span>
+                                <span>[[session.time]]</span>,
+                                <span>[[session.complexity]]</span>
                             </div>
                         </div>
                         <div class="flex"></div>
                         <div>
-                            <paper-icon-button class="back-button" on-tap="closePeople" icon="close"></paper-icon-button>
+                            <paper-icon-button class="back-button" on-tap="closeSession" icon="close"></paper-icon-button>
                         </div>
                     </div>
-                    <div class="card-content person-tags">
+                    <div class="card-content session-tags">
                         <span class="tags-label">Tags:</span>
                         <template is="dom-repeat" items="[[tags]]" as="tag">
                             <span class$="[[tag.tagClass]]">[[tag.name]]</span>
                         </template>
                     </div>
-                    <div class="card-content person-description">
-                        <template is="dom-repeat" items="[[person.badges]]" as="badge">
-                            <a class="badge block" href="[[badge.link]]" target="_blank">[[badge.description]]</a>
-                        </template>
-                        <marked-element markdown="[[person.bio]]"></marked-element>
+                    <div class="card-content session-description">
+                        <marked-element markdown="[[session.description]]"></marked-element>
                     </div>
-                    <div class="card-content sessions">
-                        <template is="dom-repeat" items="[[person.sessions]]" as="session">
-                            <div class="session">
-                                <h3 class="session-title">[[session.title]]</h3>
-                                <span class="session-meta">Language:
-                                    <span>[[session.language]]</span>
-                                </span>
-                                <span class="session-meta">Complexity:
-                                    <span>[[session.complexity]]</span>
-                                </span>
-                                <marked-element markdown="[[session.description]]"></marked-element>
-                            </div>
+                    <div class="card-content speakers">
+                        <template is="dom-repeat" items="[[session.speakerList]]" as="speaker">
+                              <div class="speaker" on-tap="navigateToSpeaker">
+                                  <h3 class="speaker-title">[[speaker.name]]</h3>
+                                  <span class="speaker-meta">
+                                      <span>[[speaker.company]]</span>,
+                                      <span>[[speaker.title]]</span>
+                                  </span>
+                                  <marked-element markdown="[[speaker.bio]]"></marked-element>
+                              </div>
                         </template>
-                    </div>
-                    <div class="card-actions">
-                        <div class="align-pb-block">
-                            <template is="dom-repeat" items="[[person.socials]]" as="social">
-                                <a href="[[social.link]]" target="_blank">
-                                    <paper-button class="colorful">[[social.name]]</paper-button>
-                                </a>
-                            </template>
-                        </div>
                     </div>
                 </div>
             </paper-card>
         </div>
         <paper-scroll-header-panel id="scrollHeaderPanel" class="visible-xs fit" condenses keep-condensed-header>
             <paper-toolbar class="tall">
-                <paper-icon-button class="back-button" on-tap="closePeople" icon="arrow-back"></paper-icon-button>
-                <div id="title" class="bottom title">[[person.name]]</div>
+                <paper-icon-button class="back-button" on-tap="closeSession" icon="arrow-back"></paper-icon-button>
+                <div id="title" class="bottom title">[[session.title]]</div>
             </paper-toolbar>
             <div class="content">
                 <div class="subtitle">
-                    <span>[[person.company]]</span>,
-                    <span>[[person.country]]</span>
+                    <span>[[session.time]]</span>,
+                    <span>[[session.complexity]]</span>
                 </div>
-                <div class="card-content person-tags">
+                <div class="card-content session-tags">
                     <span class="tags-label">Tags:</span>
                     <template is="dom-repeat" items="[[tags]]" as="tag">
                         <span class$="[[tag.tagClass]]">[[tag.name]]</span>
                     </template>
                 </div>
-                <template is="dom-repeat" items="[[person.badges]]" as="badge">
-                    <a class="badge block" href="[[badge.link]]" target="_blank">[[badge.description]]</a>
-                </template>
-                <div class="card-content people-description">
-                    <marked-element markdown="[[person.bio]]"></marked-element>
+                <div class="card-content session-description">
+                    <marked-element markdown="[[session.description]]"></marked-element>
                 </div>
-                <div class="card-content sessions">
-                    <template is="dom-repeat" items="[[person.sessions]]" as="session">
-                        <div class="session">
-                            <h3 class="session-title">[[session.title]]</h3>
-                            <span class="session-meta">Language:
-                                <span>[[session.language]]</span>
+                <div class="card-content speakers">
+                    <template is="dom-repeat" items="[[session.speakerList]]" as="speaker">
+                          <div class="speaker" on-tap="navigateToSpeaker">
+                            <h3 class="speaker-title">[[speaker.name]]</h3>
+                            <span class="speaker-meta">
+                                <span>[[speaker.company]]</span>,
+                                <span>[[speaker.title]]</span>
                             </span>
-                            <span class="session-meta">Complexity:
-                                <span>[[session.complexity]]</span>
-                            </span>
-                            <marked-element markdown="[[session.description]]"></marked-element>
-                        </div>
+                            <marked-element markdown="[[speaker.bio]]"></marked-element>
+                          </div>
                     </template>
-                </div>
-                <div class="card-actions">
-                    <div class="align-pb-block">
-                        <template is="dom-repeat" items="[[person.socials]]" as="social">
-                            <a href="[[social.link]]" target="_blank">
-                                <paper-button class="colorful">[[social.name]]</paper-button>
-                            </a>
-                        </template>
-                    </div>
                 </div>
             </div>
         </paper-scroll-header-panel>
@@ -213,9 +184,9 @@
     Polymer({
         is: 'session-dialog',
         properties: {
-            person: {
+            session: {
                 type: Object,
-                observer: '_personChanged'
+                observer: '_sessionChanged'
             },
             opened: {
                 type: Boolean,
@@ -232,18 +203,18 @@
                 Polymer.Base.transform('translate3d(' + transform + 'px,0,0)', title);
             });
         },
-        _personChanged: function() {
-            this.$.scrollHeaderPanel.$.headerBg.style.background = 'linear-gradient(to top, rgba(0, 0, 0, 0.4) -10%, rgba(0, 0, 0, 0.1) 50%), url(' + this.person.photoUrl + ') 0 / cover no-repeat';
-            // var panelClass = 'visible-xs fit ' + app.generateClass(this.person.tags[0]);
-            // this.set('person.panelClass', panelClass);
-            // this.toggleClass(app.generateClass(this.person.tags[0]), true, this.$.scrollHeaderPanel);
+        _sessionChanged: function() {
+            this.$.scrollHeaderPanel.$.headerBg.style.background = 'linear-gradient(to top, rgba(0, 0, 0, 0.4) -10%, rgba(0, 0, 0, 0.1) 50%), url(' + this.session.photoUrl + ') 0 / cover no-repeat';
+            // var panelClass = 'visible-xs fit ' + app.generateClass(this.session.tags[0]);
+            // this.set('session.panelClass', panelClass);
+            // this.toggleClass(app.generateClass(this.session.tags[0]), true, this.$.scrollHeaderPanel);
             this.async(function() {
                 this.$.scrollHeaderPanel.measureHeaderHeight();
                 this.$.scrollHeaderPanel.scroller.scrollTop = 0;
             });
             var tempTags = [];
-            for (var i = 0; i < this.person.tags.length; i++) {
-                var tagName = this.person.tags[i],
+            for (var i = 0; i < this.session.tags.length; i++) {
+                var tagName = this.session.tags[i],
                     tagClass = app.generateClass(tagName);
                 tempTags.push({
                     name: tagName,
@@ -252,7 +223,10 @@
             }
             this.tags = tempTags;
         },
-        closePeople: function() {
+        navigateToSpeaker: function(event) {
+          //TODO
+        },
+        closeSession: function() {
             this.opened = false;
         }
     });

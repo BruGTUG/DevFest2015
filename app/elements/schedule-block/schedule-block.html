@@ -225,7 +225,7 @@
             </div>
         </div>
         <div id="personCon" class="person-wrapper container relative">
-            <session-dialog id="person" class="person flex" person="{{selectedPerson}}" opened="{{opened}}"></session-dialog>
+            <session-dialog id="person" class="person flex" session="{{selectedPerson}}" opened="{{opened}}"></session-dialog>
         </div>
     </template>
 </dom-module>
@@ -261,7 +261,7 @@
             animationConfig: {
                 value: function() {
                     return {
-                        'loadPeople': {
+                        'loadSchedule': {
                             name: 'cascaded-animation',
                             animation: 'transform-animation',
                             transformFrom: 'translateY(100%)',
@@ -271,7 +271,7 @@
                                 duration: 1500
                             }
                         },
-                        'unloadPeople': {
+                        'unloadSchedule': {
                             name: 'fade-out-animation',
                             node: this.$.people,
                             timing: {
@@ -306,8 +306,10 @@
 
           for (var i = 0; i < sessions.length; i++) {
               sessions[i].speakerList = [];
-              for (var j = 0; j < sessions[i].speakers.length; j++) {
-                  sessions[i].speakerList.push(peopleTemp[sessions[i].speakers[j]]);
+              for (var j = 0; j < peopleTemp.length; j++) {
+                  if (sessions[i].speakers.indexOf(peopleTemp[j].id) > -1) {
+                    sessions[i].speakerList.push(peopleTemp[j]);
+                  }
               }
           }
 
@@ -326,7 +328,7 @@
 
             this.async(function() {
                 var nodeList = this.$.people.querySelectorAll('.card-wrapper');
-                this.animationConfig.loadPeople.nodes = Array.prototype.slice.call(nodeList);
+                this.animationConfig.loadSchedule.nodes = Array.prototype.slice.call(nodeList);
                 if (!this.checkUrlParams()) {
                     this.playLoadAnimation();
                 }
@@ -374,7 +376,7 @@
 
         playLoadAnimation: function() {
             this.cancelAnimation();
-            this.playAnimation('loadPeople');
+            this.playAnimation('loadSchedule');
         },
         readMore: function(event) {
             page.redirect('/schedule/' + event.model.session.id);
@@ -387,7 +389,7 @@
             this.cancelAnimation();
             this.playAnimation('openSession');
             if (screen.width > 768) {
-                this.playAnimation('unloadPeople');
+                this.playAnimation('unloadSchedule');
             }
         },
         closeSession: function() {
