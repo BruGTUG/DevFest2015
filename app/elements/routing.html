@@ -42,6 +42,17 @@
             app.route = 'schedule';
         });
 
+        page('/schedule/:id', function(data) {
+            trackPageview('/schedule/' + data.params.id);
+            app.route = 'schedule';
+            app.params = data.params;
+            app.scrollToTop();
+        });
+
+        page.exit('/schedule/:id', function() {
+            document.querySelector('#schedule-block').closeSession();
+        });
+
         page('/speakers', function() {
             trackPageview('/speakers');
             app.route = 'speakers';
