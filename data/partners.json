@@ -5,6 +5,10 @@
             "name": "Google",
             "url": "https://www.google.com/intl/en/about/",
             "logoUrl": "../images/partners/google.svg"
+        }, {
+            "name": "Intel",
+            "url": "https://software.intel.com",
+            "logoUrl": "../images/partners/Intel_logo_0.png"
         }]
     }, {
         "title": "Location host",

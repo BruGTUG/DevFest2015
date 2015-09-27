@@ -48,10 +48,10 @@ prototype = {};
 }
 var factory = desugar(prototype);
 prototype = factory.prototype;
-var options = {
-prototype: prototype,
-extends: prototype.extends
-};
+var options = { prototype: prototype };
+if (prototype.extends) {
+options.extends = prototype.extends;
+}
 Polymer.telemetry._registrate(prototype);
 document.registerElement(prototype.is, options);
 return factory;
@@ -568,7 +568,7 @@ debouncer.stop();
 }
 }
 });
-Polymer.version = '1.1.2';
+Polymer.version = '1.1.4';
 Polymer.Base._addFeature({
 _registerFeatures: function () {
 this._prepIs();
@@ -2777,9 +2777,9 @@ gd = gobj[dep];
 if (gd && gd[name]) {
 gd[name] = (gd[name] || 1) - 1;
 gd._count = (gd._count || 1) - 1;
-}
 if (gd._count === 0) {
 node.removeEventListener(dep, this.handleNative);
+}
 }
 }
 }
@@ -3907,6 +3907,7 @@ var h$ = this._handlers;
 for (var i = 0, l = h$.length, h; i < l && (h = h$[i]); i++) {
 h[0].call(this, h[1], h[2]);
 }
+this._handlers = [];
 }
 });
 (function () {
@@ -4030,7 +4031,7 @@ this._boundPaths = this._boundPaths || {};
 if (from) {
 this._boundPaths[to] = from;
 } else {
-this.unbindPath(to);
+this.unlinkPaths(to);
 }
 },
 unlinkPaths: function (path) {
@@ -4039,23 +4040,13 @@ delete this._boundPaths[path];
 }
 },
 _notifyBoundPaths: function (path, value) {
-var from, to;
 for (var a in this._boundPaths) {
 var b = this._boundPaths[a];
 if (path.indexOf(a + '.') == 0) {
-from = a;
-to = b;
-break;
+this.notifyPath(this._fixPath(b, a, path), value);
+} else if (path.indexOf(b + '.') == 0) {
+this.notifyPath(this._fixPath(a, b, path), value);
 }
-if (path.indexOf(b + '.') == 0) {
-from = b;
-to = a;
-break;
-}
-}
-if (from && to) {
-var p = this._fixPath(to, from, path);
-this.notifyPath(p, value);
 }
 },
 _fixPath: function (property, root, path) {
@@ -4283,7 +4274,7 @@ MIXIN_RULE: 1000
 OPEN_BRACE: '{',
 CLOSE_BRACE: '}',
 _rx: {
-comments: /\/\*[^*]*\*+([^/*][^*]*\*+)*\//gim,
+comments: /\/\*[^*]*\*+([^\/*][^*]*\*+)*\//gim,
 port: /@import[^;]*;/gim,
 customProp: /(?:^|[\s;])--[^;{]*?:[^{};]*?(?:[;\n]|$)/gim,
 mixinProp: /(?:^|[\s;])--[^;{]*?:[^{;]*?{[^}]*?}(?:[;\n]|$)?/gim,
@@ -7287,14 +7278,39 @@ Example:
   /** @polymerBehavior */
   Polymer.IronSelectableBehavior = {
 
+      /**
+       * Fired when iron-selector is activated (selected or deselected).
+       * It is fired before the selected items are changed.
+       * Cancel the event to abort selection.
+       *
+       * @event iron-activate
+       */
+
+      /**
+       * Fired when an item is selected
+       *
+       * @event iron-select
+       */
+
+      /**
+       * Fired when an item is deselected
+       *
+       * @event iron-deselect
+       */
+
+      /**
+       * Fired when the list of selectable items changes (e.g., items are
+       * added or removed). The detail of the event is a list of mutation
+       * records that describe what changed.
+       *
+       * @event iron-items-changed
+       */
+
     properties: {
 
       /**
        * If you want to use the attribute value of an element for `selected` instead of the index,
        * set this to the name of the attribute.
-       *
-       * @attribute attrForSelected
-       * @type {string}
        */
       attrForSelected: {
         type: String,
@@ -7303,9 +7319,6 @@ Example:
 
       /**
        * Gets or sets the selected element. The default is to use the index of the item.
-       *
-       * @attribute selected
-       * @type {string}
        */
       selected: {
         type: String,
@@ -7314,9 +7327,6 @@ Example:
 
       /**
        * Returns the currently selected item.
-       *
-       * @attribute selectedItem
-       * @type {Object}
        */
       selectedItem: {
         type: Object,
@@ -7328,10 +7338,6 @@ Example:
        * The event that fires from items when they are selected. Selectable
        * will listen for this event from items and update the selection state.
        * Set to empty string to listen to no events.
-       *
-       * @attribute activateEvent
-       * @type {string}
-       * @default 'tap'
        */
       activateEvent: {
         type: String,
@@ -7340,19 +7346,13 @@ Example:
       },
 
       /**
-       * This is a CSS selector sting.  If this is set, only items that matches the CSS selector
+       * This is a CSS selector string.  If this is set, only items that match the CSS selector
        * are selectable.
-       *
-       * @attribute selectable
-       * @type {string}
        */
       selectable: String,
 
       /**
        * The class to set on elements when selected.
-       *
-       * @attribute selectedClass
-       * @type {string}
        */
       selectedClass: {
         type: String,
@@ -7361,24 +7361,31 @@ Example:
 
       /**
        * The attribute to set on elements when selected.
-       *
-       * @attribute selectedAttribute
-       * @type {string}
        */
       selectedAttribute: {
         type: String,
         value: null
-      }
+      },
 
+      /**
+       * The set of excluded elements where the key is the `localName` 
+       * of the element that will be ignored from the item list.
+       *
+       * @default {template: 1}
+       */
+      excludedLocalNames: {
+        type: Object,
+        value: function() {
+          return {
+            'template': 1
+          };
+        }
+      }
     },
 
     observers: [
       '_updateSelected(attrForSelected, selected)'
     ],
-
-    excludedLocalNames: {
-      'template': 1
-    },
 
     created: function() {
       this._bindFilterItem = this._filterItem.bind(this);
@@ -7458,9 +7465,7 @@ Example:
     },
 
     _removeListener: function(eventName) {
-      // There is no unlisten yet...
-      // https://github.com/Polymer/polymer/issues/1639
-      //this.removeEventListener(eventName, this._bindActivateHandler);
+      this.unlisten(this, eventName, '_activateHandler');
     },
 
     _activateEventChanged: function(eventName, old) {
@@ -7536,7 +7541,15 @@ Example:
 
     // observe items change under the given node.
     _observeItems: function(node) {
-      var observer = new MutationObserver(function() {
+      // TODO(cdata): Update this when we get distributed children changed.
+      var observer = new MutationObserver(function(mutations) {
+        // Let other interested parties know about the change so that
+        // we don't have to recreate mutation observers everywher.
+        this.fire('iron-items-changed', mutations, {
+          bubbles: false,
+          cancelable: false
+        });
+
         if (this.selected != null) {
           this._updateSelected();
         }
@@ -7549,11 +7562,6 @@ Example:
     },
 
     _activateHandler: function(e) {
-      // TODO: remove this when https://github.com/Polymer/polymer/issues/1639 is fixed so we
-      // can just remove the old event listener.
-      if (e.type !== this.activateEvent) {
-        return;
-      }
       var t = e.target;
       var items = this.items;
       while (t && t != this) {
@@ -11366,7 +11374,7 @@ context. You should place this element as a child of `<body>` whenever possible.
     },
 
     listeners: {
-      'click': '_onClick',
+      'tap': '_onClick',
       'iron-resize': '_onIronResize'
     },
 
@@ -11426,7 +11434,7 @@ context. You should place this element as a child of `<body>` whenever possible.
      * Cancels the overlay.
      */
     cancel: function() {
-      this.opened = false,
+      this.opened = false;
       this._setCanceled(true);
     },
 
@@ -11484,8 +11492,16 @@ context. You should place this element as a child of `<body>` whenever possible.
 
     _toggleListener: function(enable, node, event, boundListener, capture) {
       if (enable) {
+        // enable document-wide tap recognizer
+        if (event === 'tap') {
+          Polymer.Gestures.add(document, 'tap', null);
+        }
         node.addEventListener(event, boundListener, capture);
       } else {
+        // disable document-wide tap recognizer
+        if (event === 'tap') {
+          Polymer.Gestures.remove(document, 'tap', null);
+        }
         node.removeEventListener(event, boundListener, capture);
       }
     },
@@ -11496,10 +11512,10 @@ context. You should place this element as a child of `<body>` whenever possible.
       }
       // async so we don't auto-close immediately via a click.
       this._toggleListenersAsync = this.async(function() {
-        this._toggleListener(this.opened, document, 'click', this._boundOnCaptureClick, true);
+        this._toggleListener(this.opened, document, 'tap', this._boundOnCaptureClick, true);
         this._toggleListener(this.opened, document, 'keydown', this._boundOnCaptureKeydown, true);
         this._toggleListenersAsync = null;
-      });
+      }, 1);
     },
 
     // tasks which must occur before opening; e.g. making the element visible
@@ -13753,7 +13769,7 @@ The `aria-labelledby` attribute will be set to the header element, if one exists
     },
 
     listeners: {
-      'click': '_onDialogClick',
+      'tap': '_onDialogClick',
       'iron-overlay-opened': '_onIronOverlayOpened',
       'iron-overlay-closed': '_onIronOverlayClosed'
     },
@@ -13949,10 +13965,10 @@ shadow.
 
 Example:
 
-    <paper-button>flat button</paper-button>
-    <paper-button raised>raised button</paper-button>
+    <paper-button>Flat button</paper-button>
+    <paper-button raised>Raised button</paper-button>
     <paper-button noink>No ripple effect</paper-button>
-    <paper-button toggles>toggle-able button</paper-button>
+    <paper-button toggles>Toggle-able button</paper-button>
 
 A button that has `toggles` true will remain `active` after being clicked (and
 will have an `active` attribute set). For more information, see the `Polymer.IronButtonState`
@@ -13970,29 +13986,32 @@ create a button with an icon and some text:
 
 Style the button with CSS as you would a normal DOM element.
 
-    /* make #my-button green with yellow text */
-    #my-button {
-        background: green;
-        color: yellow;
+    paper-button.fancy {
+      background: green;
+      color: yellow;
+    }
+
+    paper-button.fancy:hover {
+      background: lime;
+    }
+
+    paper-button[disabled],
+    paper-button[toggles][active] {
+      background: red;
     }
 
 By default, the ripple is the same color as the foreground at 25% opacity. You may
-customize the color using this selector:
-
-    /* make #my-button use a blue ripple instead of foreground color */
-    #my-button::shadow paper-ripple {
-      color: blue;
-    }
-
-The opacity of the ripple is not customizable via CSS.
+customize the color using the `--paper-button-ink-color` custom property.
 
 The following custom properties and mixins are also available for styling:
 
 Custom property | Description | Default
 ----------------|-------------|----------
-`--paper-button-flat-focus-color` | Background color of a focused flat button | `--paper-grey-200`
+`--paper-button-ink-color` | Background color of the ripple | `Based on the button's color`
 `--paper-button` | Mixin applied to the button | `{}`
-`--paper-button-disabled` | Mixin applied to the disabled button | `{}`
+`--paper-button-disabled` | Mixin applied to the disabled button. Note that you can also use the `paper-button[disabled]` selector | `{}`
+`--paper-button-flat-keyboard-focus` | Mixin applied to a flat button after it's been focused using the keyboard | `{}`
+`--paper-button-raised-keyboard-focus` | Mixin applied to a raised button after it's been focused using the keyboard | `{}`
 
 @demo demo/index.html
 -->
@@ -14287,6 +14306,11 @@ is separate from validation, and `allowed-pattern` does not affect how the input
   Polymer.PaperInputBehaviorImpl = {
 
     properties: {
+      /**
+       * Fired when the input changes due to user interaction.
+       *
+       * @event change
+       */
 
       /**
        * The label for this input. Bind this to `<paper-input-container>`'s `label` property.
@@ -14319,7 +14343,8 @@ is separate from validation, and `allowed-pattern` does not affect how the input
        */
       invalid: {
         type: Boolean,
-        value: false
+        value: false,
+        notify: true
       },
 
       /**
@@ -14656,6 +14681,19 @@ is separate from validation, and `allowed-pattern` does not affect how the input
         label.id = labelledBy;
       }
       this._ariaLabelledBy = labelledBy;
+    },
+
+    _onChange:function(event) {
+      // In the Shadow DOM, the `change` event is not leaked into the
+      // ancestor tree, so we must do this manually.
+      // See https://w3c.github.io/webcomponents/spec/shadow/#events-that-are-not-leaked-into-ancestor-trees.
+      if (this.shadowRoot) {
+        this.fire(event.type, {sourceEvent: event}, {
+          node: this,
+          bubbles: event.bubbles,
+          cancelable: event.cancelable
+        });
+      }
     }
 
   };
@@ -14929,59 +14967,27 @@ This element has `role="listitem"` by default. Depending on usage, it may be mor
 
     listeners: {
       'focus': '_onFocus',
-      'keydown': '_onKeydown'
+      'keydown': '_onKeydown',
+      'iron-items-changed': '_onIronItemsChanged'
     },
 
     keyBindings: {
       'up': '_onUpKey',
       'down': '_onDownKey',
       'esc': '_onEscKey',
-      'enter': '_onEnterKey',
       'shift+tab:keydown': '_onShiftTabDown'
     },
 
-    _updateMultiselectable: function(multi) {
-      if (multi) {
-        this.setAttribute('aria-multiselectable', 'true');
-      } else {
-        this.removeAttribute('aria-multiselectable');
-      }
+    attached: function() {
+      this._resetTabindices();
     },
 
-    _onShiftTabDown: function() {
-      var oldTabIndex;
-
-      Polymer.IronMenuBehaviorImpl._shiftTabPressed = true;
-
-      oldTabIndex = this.getAttribute('tabindex');
-
-      this.setAttribute('tabindex', '-1');
-
-      this.async(function() {
-        this.setAttribute('tabindex', oldTabIndex);
-        Polymer.IronMenuBehaviorImpl._shiftTabPressed = false;
-      // Note: polymer/polymer#1305
-      }, 1);
-    },
-
-    _applySelection: function(item, isSelected) {
-      if (isSelected) {
-        item.setAttribute('aria-selected', 'true');
-      } else {
-        item.removeAttribute('aria-selected');
-      }
-
-      Polymer.IronSelectableBehavior._applySelection.apply(this, arguments);
-    },
-
-    _focusedItemChanged: function(focusedItem, old) {
-      old && old.setAttribute('tabindex', '-1');
-      if (focusedItem) {
-        focusedItem.setAttribute('tabindex', '0');
-        focusedItem.focus();
-      }
-    },
-
+    /**
+     * Selects the given value. If the `multi` property is true, then the selected state of the
+     * `value` will be toggled; otherwise the `value` will be selected.
+     *
+     * @param {string} value the value to select.
+     */
     select: function(value) {
       if (this._defaultFocusAsync) {
         this.cancelAsync(this._defaultFocusAsync);
@@ -14993,6 +14999,152 @@ This element has `role="listitem"` by default. Depending on usage, it may be mor
       Polymer.IronMultiSelectableBehaviorImpl.select.apply(this, arguments);
     },
 
+    /**
+     * Resets all tabindex attributes to the appropriate value based on the
+     * current selection state. The appropriate value is `0` (focusable) for
+     * the default selected item, and `-1` (not keyboard focusable) for all
+     * other items.
+     */
+    _resetTabindices: function() {
+      var selectedItem = this.multi ? (this.selectedItems && this.selectedItems[0]) : this.selectedItem;
+
+      this.items.forEach(function(item) {
+        item.setAttribute('tabindex', item === selectedItem ? '0' : '-1');
+      }, this);
+    },
+
+    /**
+     * Sets appropriate ARIA based on whether or not the menu is meant to be
+     * multi-selectable.
+     *
+     * @param {boolean} multi True if the menu should be multi-selectable.
+     */
+    _updateMultiselectable: function(multi) {
+      if (multi) {
+        this.setAttribute('aria-multiselectable', 'true');
+      } else {
+        this.removeAttribute('aria-multiselectable');
+      }
+    },
+
+    /**
+     * Given a KeyboardEvent, this method will focus the appropriate item in the
+     * menu (if there is a relevant item, and it is possible to focus it).
+     *
+     * @param {KeyboardEvent} event A KeyboardEvent.
+     */
+    _focusWithKeyboardEvent: function(event) {
+      for (var i = 0, item; item = this.items[i]; i++) {
+        var attr = this.attrForItemTitle || 'textContent';
+        var title = item[attr] || item.getAttribute(attr);
+        if (title && title.trim().charAt(0).toLowerCase() === String.fromCharCode(event.keyCode).toLowerCase()) {
+          this._setFocusedItem(item);
+          break;
+        }
+      }
+    },
+
+    /**
+     * Focuses the previous item (relative to the currently focused item) in the
+     * menu.
+     */
+    _focusPrevious: function() {
+      var length = this.items.length;
+      var index = (Number(this.indexOf(this.focusedItem)) - 1 + length) % length;
+      this._setFocusedItem(this.items[index]);
+    },
+
+    /**
+     * Focuses the next item (relative to the currently focused item) in the
+     * menu.
+     */
+    _focusNext: function() {
+      var index = (Number(this.indexOf(this.focusedItem)) + 1) % this.items.length;
+      this._setFocusedItem(this.items[index]);
+    },
+
+    /**
+     * Mutates items in the menu based on provided selection details, so that
+     * all items correctly reflect selection state.
+     *
+     * @param {Element} item An item in the menu.
+     * @param {boolean} isSelected True if the item should be shown in a
+     * selected state, otherwise false.
+     */
+    _applySelection: function(item, isSelected) {
+      if (isSelected) {
+        item.setAttribute('aria-selected', 'true');
+      } else {
+        item.removeAttribute('aria-selected');
+      }
+
+      Polymer.IronSelectableBehavior._applySelection.apply(this, arguments);
+    },
+
+    /**
+     * Discretely updates tabindex values among menu items as the focused item
+     * changes.
+     *
+     * @param {Element} focusedItem The element that is currently focused.
+     * @param {?Element} old The last element that was considered focused, if
+     * applicable.
+     */
+    _focusedItemChanged: function(focusedItem, old) {
+      old && old.setAttribute('tabindex', '-1');
+      if (focusedItem) {
+        focusedItem.setAttribute('tabindex', '0');
+        focusedItem.focus();
+      }
+    },
+
+    /**
+     * A handler that responds to mutation changes related to the list of items
+     * in the menu.
+     *
+     * @param {CustomEvent} event An event containing mutation records as its
+     * detail.
+     */
+    _onIronItemsChanged: function(event) {
+      var mutations = event.detail;
+      var mutation;
+      var index;
+
+      for (index = 0; index < mutations.length; ++index) {
+        mutation = mutations[index];
+
+        if (mutation.addedNodes.length) {
+          this._resetTabindices();
+          break;
+        }
+      }
+    },
+
+    /**
+     * Handler that is called when a shift+tab keypress is detected by the menu.
+     *
+     * @param {CustomEvent} event A key combination event.
+     */
+    _onShiftTabDown: function(event) {
+      var oldTabIndex;
+
+      Polymer.IronMenuBehaviorImpl._shiftTabPressed = true;
+
+      oldTabIndex = this.getAttribute('tabindex');
+
+      this.setAttribute('tabindex', '-1');
+
+      this.async(function() {
+        this.setAttribute('tabindex', oldTabIndex);
+        Polymer.IronMenuBehaviorImpl._shiftTabPressed = false;
+      // NOTE(cdata): polymer/polymer#1305
+      }, 1);
+    },
+
+    /**
+     * Handler that is called when the menu receives focus.
+     *
+     * @param {FocusEvent} event A focus event.
+     */
     _onFocus: function(event) {
       if (Polymer.IronMenuBehaviorImpl._shiftTabPressed) {
         return;
@@ -15014,62 +15166,48 @@ This element has `role="listitem"` by default. Depending on usage, it may be mor
       }, 100);
     },
 
-    _onUpKey: function() {
+    /**
+     * Handler that is called when the up key is pressed.
+     *
+     * @param {CustomEvent} event A key combination event.
+     */
+    _onUpKey: function(event) {
       // up and down arrows moves the focus
       this._focusPrevious();
     },
 
-    _onDownKey: function() {
+    /**
+     * Handler that is called when the down key is pressed.
+     *
+     * @param {CustomEvent} event A key combination event.
+     */
+    _onDownKey: function(event) {
       this._focusNext();
     },
 
-    _onEscKey: function() {
+    /**
+     * Handler that is called when the esc key is pressed.
+     *
+     * @param {CustomEvent} event A key combination event.
+     */
+    _onEscKey: function(event) {
       // esc blurs the control
       this.focusedItem.blur();
     },
 
-    _onEnterKey: function(event) {
-      // enter activates the item unless it is disabled
-      this._activateFocused(event.detail.keyboardEvent);
-    },
-
+    /**
+     * Handler that is called when a keydown event is detected.
+     *
+     * @param {KeyboardEvent} event A keyboard event.
+     */
     _onKeydown: function(event) {
-      if (this.keyboardEventMatchesKeys(event, 'up down esc enter')) {
+      if (this.keyboardEventMatchesKeys(event, 'up down esc')) {
         return;
       }
 
       // all other keys focus the menu item starting with that character
       this._focusWithKeyboardEvent(event);
-    },
-
-    _focusWithKeyboardEvent: function(event) {
-      for (var i = 0, item; item = this.items[i]; i++) {
-        var attr = this.attrForItemTitle || 'textContent';
-        var title = item[attr] || item.getAttribute(attr);
-        if (title && title.trim().charAt(0).toLowerCase() === String.fromCharCode(event.keyCode).toLowerCase()) {
-          this._setFocusedItem(item);
-          break;
-        }
-      }
-    },
-
-    _activateFocused: function(event) {
-      if (!this.focusedItem.hasAttribute('disabled')) {
-        this._activateHandler(event);
-      }
-    },
-
-    _focusPrevious: function() {
-      var length = this.items.length;
-      var index = (Number(this.indexOf(this.focusedItem)) - 1 + length) % length;
-      this._setFocusedItem(this.items[index]);
-    },
-
-    _focusNext: function() {
-      var index = (Number(this.indexOf(this.focusedItem)) + 1) % this.items.length;
-      this._setFocusedItem(this.items[index]);
     }
-
   };
 
   Polymer.IronMenuBehaviorImpl._shiftTabPressed = false;
@@ -15152,11 +15290,13 @@ of a menu item will also focus it.
     },
 
     _onUpKey: function(event) {
-      this._activateFocused(event.detail.keyboardEvent);
+      this.focusedItem.click();
+      event.detail.keyboardEvent.preventDefault();
     },
 
     _onDownKey: function(event) {
-      this._activateFocused(event.detail.keyboardEvent);
+      this.focusedItem.click();
+      event.detail.keyboardEvent.preventDefault();
     },
 
     _onLeftKey: function() {
@@ -15168,7 +15308,7 @@ of a menu item will also focus it.
     },
 
     _onKeydown: function(event) {
-      if (this.keyboardEventMatchesKeys(event, 'up down left right esc enter')) {
+      if (this.keyboardEventMatchesKeys(event, 'up down left right esc')) {
         return;
       }
 
@@ -15662,12 +15802,12 @@ Any number of components can use `<google-maps-api>` elements, and the library w
       },
 
       /**
-       * The libraries to load with this map. Defaults to "places". For more information
+       * The libraries to load with this map. For more information
        * see https://developers.google.com/maps/documentation/javascript/libraries.
        */
       libraries: {
         type: String,
-        value: 'places'
+        value: ''
       },
 
       /**
@@ -15719,7 +15859,10 @@ Any number of components can use `<google-maps-api>` elements, and the library w
 
     _computeUrl: function(mapsUrl, version, libraries, apiKey, clientId, language, signedIn) {
       var url = mapsUrl + '&v=' + version;
-      url += "&libraries=" + libraries;
+
+      if (libraries) {
+        url += "&libraries=" + libraries;
+      }
 
       if (apiKey && !clientId) {
         url += '&key=' + apiKey;
@@ -18551,15 +18694,17 @@ Configuration:
     _constructServiceWorkerUrl: function() {
       var paramsPromises = [];
       var children = Polymer.dom(this).children;
+      var baseUri = new URL(this.baseUri, window.location.href);
+
       for (var i = 0; i < children.length; i++) {
         if (typeof children[i]._getParameters === 'function') {
-          paramsPromises.push(children[i]._getParameters(this.baseUri));
+          paramsPromises.push(children[i]._getParameters(baseUri));
         }
       }
 
       return Promise.all(paramsPromises).then(function(paramsResolutions) {
         var params = {
-          baseURI: this.baseUri,
+          baseURI: baseUri,
           version: this._version
         };
 
@@ -19888,6 +20033,22 @@ module.exports = Array.isArray || function (arr) {
             document.querySelector('#blog').closePost();
         });
 
+        page('/schedule', function() {
+            trackPageview('/schedule');
+            app.route = 'schedule';
+        });
+
+        page('/schedule/:id', function(data) {
+            trackPageview('/schedule/' + data.params.id);
+            app.route = 'schedule';
+            app.params = data.params;
+            app.scrollToTop();
+        });
+
+        page.exit('/schedule/:id', function() {
+            document.querySelector('#schedule-block').closeSession();
+        });
+
         page('/speakers', function() {
             trackPageview('/speakers');
             app.route = 'speakers';
@@ -19931,13 +20092,13 @@ module.exports = Array.isArray || function (arr) {
             app.route = 'code-of-conduct';
             app.scrollToTop();
         });
-        
+
         //Change base for subfolders
         //page.base('/dist');
         /*var str = window.location.pathname;
        	str = str.substring(0, str.length - 1);
         page.base(str);*/
-        
+
         page({
             hashbang: true
         });
@@ -20775,6 +20936,10 @@ module.exports = Array.isArray || function (arr) {
       overflow: auto;
     }
 
+    :host(:not(.has-scroller)) {
+      position: relative;
+    }
+
     #items {
       position: relative;
     }
@@ -20908,12 +21073,13 @@ module.exports = Array.isArray || function (arr) {
 
     /**
      * The ratio of hidden tiles that should remain in the scroll direction.
-     * Recommended value ≈ 0.5, so it will distribute tiles evely in both directions.
+     * Recommended value ~0.5, so it will distribute tiles evely in both directions.
      */
     _ratio: 0.5,
 
     /**
      * The element that controls the scroll
+     * @type {?Element}
      */
     _scroller: null,
 
@@ -20979,9 +21145,14 @@ module.exports = Array.isArray || function (arr) {
     _physicalIndexForKey: null,
 
     /**
-     * The average scroll size
+     * The estimated scroll height based on `_physicalAverage`
      */
-    _scrollSize: 0,
+    _estScrollHeight: 0,
+
+    /**
+     * The scroll height of the dom node
+     */
+    _scrollHeight: 0,
 
     /**
      * The size of the viewport
@@ -20990,22 +21161,26 @@ module.exports = Array.isArray || function (arr) {
 
     /**
      * An array of DOM nodes that are currently in the tree
+     * @type {?Array<!TemplatizerNode>}
      */
     _physicalItems: null,
 
     /**
      * An array of heights for each item in `_physicalItems`
+     * @type {?Array<number>}
      */
     _physicalSizes: null,
 
     /**
      * A cached value for the visible index.
      * See `firstVisibleIndex`
+     * @type {?number}
      */
     _firstVisibleIndexVal: null,
 
     /**
      * A Polymer collection for the items.
+     * @type {?Polymer.Collection}
      */
     _collection: null,
 
@@ -21053,7 +21228,7 @@ module.exports = Array.isArray || function (arr) {
      * The maximum scroll top value.
      */
     get _maxScrollTop() {
-      return this._scrollSize - this._viewportSize;
+      return this._estScrollHeight - this._viewportSize;
     },
 
     /**
@@ -21133,8 +21308,9 @@ module.exports = Array.isArray || function (arr) {
       // e.g. paper-scroll-header-panel
       var el = Polymer.dom(this);
 
-      if (el.parentNode && el.parentNode.scroller) {
-        this._scroller = el.parentNode.scroller;
+      var parentNode = /** @type {?{scroller: ?Element}} */ (el.parentNode);
+      if (parentNode && parentNode.scroller) {
+        this._scroller = parentNode.scroller;
       } else {
         this._scroller = this;
         this.classList.add('has-scroller');
@@ -21168,7 +21344,7 @@ module.exports = Array.isArray || function (arr) {
      */
     updateViewportBoundaries: function() {
       var scrollerStyle = window.getComputedStyle(this._scroller);
-      this._scrollerPaddingTop = parseInt(scrollerStyle['padding-top']);
+      this._scrollerPaddingTop = parseInt(scrollerStyle['padding-top'], 10);
       this._viewportSize = this._scroller.offsetHeight;
     },
 
@@ -21280,6 +21456,8 @@ module.exports = Array.isArray || function (arr) {
 
     /**
      * Update the list of items, starting from the `_virtualStartVal` item.
+     * @param {!Array<number>=} itemSet
+     * @param {!Array<number>=} movingUp
      */
     _update: function(itemSet, movingUp) {
       // update models
@@ -21303,9 +21481,9 @@ module.exports = Array.isArray || function (arr) {
       this._updateScrollerSize();
 
       // increase the pool of physical items if needed
-      if (itemSet = this._increasePoolIfNeeded()) {
+      if (this._increasePoolIfNeeded()) {
         // set models to the new items
-        this.async(this._update.bind(this, itemSet));
+        this.async(this._update);
       }
     },
 
@@ -21335,11 +21513,11 @@ module.exports = Array.isArray || function (arr) {
      * (limited by `MAX_PHYSICAL_COUNT`) if the content size is shorter than
      * `_optPhysicalSize`
      *
-     * @return Array
+     * @return boolean
      */
     _increasePoolIfNeeded: function() {
       if (this._physicalSize >= this._optPhysicalSize || this._physicalAverage === 0) {
-        return null;
+        return false;
       }
 
       // the estimated number of physical items that we will need to reach
@@ -21359,7 +21537,7 @@ module.exports = Array.isArray || function (arr) {
       var delta = nextPhysicalCount - prevPhysicalCount;
 
       if (delta <= 0) {
-        return null;
+        return false;
       }
 
       var newPhysicalItems = this._createPool(delta);
@@ -21369,13 +21547,8 @@ module.exports = Array.isArray || function (arr) {
       [].push.apply(this._physicalSizes, emptyArray);
 
       this._physicalCount = prevPhysicalCount + delta;
-
-      // fill the array with the new item pos
-      while (delta > 0) {
-        emptyArray[--delta] = prevPhysicalCount + delta;
-      }
-
-      return emptyArray;
+ 
+      return true;
     },
 
     /**
@@ -21482,6 +21655,10 @@ module.exports = Array.isArray || function (arr) {
       }
     },
 
+    /**
+     * Called when the items have changed. That is, ressignments
+     * to `items`, splices or updates to a single item.
+     */
     _itemsChanged: function(change) {
       if (change.path === 'items') {
         // render the new set
@@ -21521,6 +21698,9 @@ module.exports = Array.isArray || function (arr) {
       }
     },
 
+    /**
+     * @param {!Array<!PolymerSplice>} splices
+     */
     _adjustVirtualIndex: function(splices) {
       var i, splice, idx;
 
@@ -21545,6 +21725,13 @@ module.exports = Array.isArray || function (arr) {
       this._refresh();
     },
 
+    /**
+     * Executes a provided function per every physical index in `itemSet`
+     * `itemSet` default value is equivalent to the entire set of physical indexes.
+     * 
+     * @param {!function(number, number)} fn
+     * @param {!Array<number>=} itemSet
+     */
     _iterateItems: function(fn, itemSet) {
       var pidx, vidx, rtn, i;
 
@@ -21580,6 +21767,10 @@ module.exports = Array.isArray || function (arr) {
       }
     },
 
+    /**
+     * Assigns the data models to a given set of items.
+     * @param {!Array<number>=} itemSet
+     */
     _assignModels: function(itemSet) {
       this._iterateItems(function(pidx, vidx) {
         var el = this._physicalItems[pidx];
@@ -21589,7 +21780,8 @@ module.exports = Array.isArray || function (arr) {
         if (item) {
           inst[this.as] = item;
           inst.__key__ = this._collection.getKey(item);
-          inst[this.selectedAs] = this.$.selector.isSelected(item);
+          inst[this.selectedAs] =
+            /** @type {!ArraySelectorElement} */ (this.$.selector).isSelected(item);
           inst[this.indexAs] = vidx;
           el.removeAttribute('hidden');
           this._physicalIndexForKey[inst.__key__] = pidx;
@@ -21601,6 +21793,9 @@ module.exports = Array.isArray || function (arr) {
       }, itemSet);
     },
 
+    /**
+     * Updates the height for a given set of items.
+     */
     _updateMetrics: function() {
       var total = 0;
       var prevAvgCount = this._physicalAverageCount;
@@ -21626,7 +21821,10 @@ module.exports = Array.isArray || function (arr) {
       }
     },
 
-    _positionItems: function(itemSet) {
+    /**
+     * Updates the position of the physical items.
+     */
+    _positionItems: function() {
       this._adjustScrollPosition();
 
       var y = this._physicalTop;
@@ -21636,9 +21834,12 @@ module.exports = Array.isArray || function (arr) {
         this.transform('translate3d(0, ' + y + 'px, 0)', this._physicalItems[pidx]);
         y += this._physicalSizes[pidx];
 
-      }, itemSet);
+      });
     },
 
+    /**
+     * Adjusts the scroll position when it was overestimated.
+     */
     _adjustScrollPosition: function() {
       var deltaHeight = this._virtualStartVal === 0 ? this._physicalTop :
           Math.min(this._scrollPosition + this._physicalTop, 0);
@@ -21653,6 +21854,9 @@ module.exports = Array.isArray || function (arr) {
       }
     },
 
+    /**
+     * Sets the position of the scroll.
+     */
     _resetScrollPosition: function(pos) {
       if (this._scroller) {
         this._scroller.scrollTop = pos;
@@ -21660,11 +21864,21 @@ module.exports = Array.isArray || function (arr) {
       }
     },
 
-    _updateScrollerSize: function() {
-      this._scrollSize = (this._physicalBottom +
+    /**
+     * Sets the scroll height, that's the height of the content,
+     */
+    _updateScrollerSize: function(forceUpdate) {
+      this._estScrollHeight = (this._physicalBottom +
           Math.max(this._virtualCount - this._physicalCount - this._virtualStartVal, 0) * this._physicalAverage);
 
-      this.$.items.style.height = this._scrollSize + 'px';
+      forceUpdate = forceUpdate || this._scrollHeight === 0;
+      forceUpdate = forceUpdate || this._scrollPosition >= this._estScrollHeight - this._physicalSize;
+
+      // amortize height adjustment, so it won't trigger repaints very often
+      if (forceUpdate || Math.abs(this._estScrollHeight - this._scrollHeight) >= this._optPhysicalSize) {
+        this.$.items.style.height = this._estScrollHeight + 'px';
+        this._scrollHeight = this._estScrollHeight;
+      }
     },
 
     /**
@@ -21679,7 +21893,6 @@ module.exports = Array.isArray || function (arr) {
         return;
       }
 
-      var itemSet;
       var firstVisible = this.firstVisibleIndex;
 
       idx = Math.min(Math.max(idx, 0), this._virtualCount-1);
@@ -21710,7 +21923,7 @@ module.exports = Array.isArray || function (arr) {
       }
 
       // update the scroller size
-      this._updateScrollerSize();
+      this._updateScrollerSize(true);
 
       // update the position of the items
       this._positionItems();
@@ -21719,9 +21932,9 @@ module.exports = Array.isArray || function (arr) {
       this._resetScrollPosition(this._physicalTop + targetOffsetTop + 1);
 
       // increase the pool of physical items if needed
-      if (itemSet = this._increasePoolIfNeeded()) {
+      if (this._increasePoolIfNeeded()) {
         // set models to the new items
-        this.async(this._update.bind(this, itemSet));
+        this.async(this._update);
       }
 
       // clear cached visible index
@@ -21824,8 +22037,8 @@ module.exports = Array.isArray || function (arr) {
      * @param {(Object|number)} item the item object or its index
      */
     toggleSelectionForItem: function(item) {
-      var item = typeof item === 'number' ? this.items[item] : item;
-      if (this.$.selector.isSelected(item)) {
+      item = typeof item === 'number' ? this.items[item] : item;
+      if (/** @type {!ArraySelectorElement} */ (this.$.selector).isSelected(item)) {
         this.deselectItem(item);
       } else {
         this.selectItem(item);
@@ -21850,8 +22063,8 @@ module.exports = Array.isArray || function (arr) {
       } else if (this.selectedItem) {
         unselect.call(this, this.selectedItem);
       }
-     
-      this.$.selector.clearSelection();    
+
+      /** @type {!ArraySelectorElement} */ (this.$.selector).clearSelection();
     },
 
     /**
@@ -21861,8 +22074,10 @@ module.exports = Array.isArray || function (arr) {
     _selectionEnabledChanged: function(selectionEnabled) {
       if (selectionEnabled) {
         this.listen(this, 'tap', '_selectionHandler');
+        this.listen(this, 'keypress', '_selectionHandler');
       } else {
         this.unlisten(this, 'tap', '_selectionHandler');
+        this.unlisten(this, 'keypress', '_selectionHandler');
       }
     },
 
@@ -21870,9 +22085,12 @@ module.exports = Array.isArray || function (arr) {
      * Select an item from an event object.
      */
     _selectionHandler: function(e) {
-      var model = this.modelForElement(e.target);
-      if (model) {
-        this.toggleSelectionForItem(model[this.as]);
+      var ENTER_KEY = 13, model;
+      if (e.type !== 'keypress' || e.keyCode === ENTER_KEY) {
+        model = this.modelForElement(e.target);
+        if (model) {
+          this.toggleSelectionForItem(model[this.as]);
+        }
       }
     },
 
@@ -23439,73 +23657,73 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   @param {Object} detail
   @param {Object} detail.node The animated node
   -->
-
-  <style>
-    :host {
-      display: block;
-      position: absolute;
-      border-radius: inherit;
-      overflow: hidden;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-
-    :host([animating]) {
-      /* This resolves a rendering issue in Chrome (as of 40) where the
-         ripple is not properly clipped by its parent (which may have
-         rounded corners). See: http://jsbin.com/temexa/4
-
-         Note: We only apply this style conditionally. Otherwise, the browser
-         will create a new compositing layer for every ripple element on the
-         page, and that would be bad. */
-      -webkit-transform: translate(0, 0);
-      transform: translate3d(0, 0, 0);
-    }
-
-    :host([noink]) {
-      pointer-events: none;
-    }
-
-    #background,
-    #waves,
-    .wave-container,
-    .wave {
-      pointer-events: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    #background,
-    .wave {
-      opacity: 0;
-    }
-
-    #waves,
-    .wave {
-      overflow: hidden;
-    }
-
-    .wave-container,
-    .wave {
-      border-radius: 50%;
-    }
-
-    :host(.circle) #background,
-    :host(.circle) #waves {
-      border-radius: 50%;
-    }
-
-    :host(.circle) .wave-container {
-      overflow: hidden;
-    }
-
-  </style>
+  
   <template>
+    <style>
+      :host {
+        display: block;
+        position: absolute;
+        border-radius: inherit;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+  
+      :host([animating]) {
+        /* This resolves a rendering issue in Chrome (as of 40) where the
+           ripple is not properly clipped by its parent (which may have
+           rounded corners). See: http://jsbin.com/temexa/4
+  
+           Note: We only apply this style conditionally. Otherwise, the browser
+           will create a new compositing layer for every ripple element on the
+           page, and that would be bad. */
+        -webkit-transform: translate(0, 0);
+        transform: translate3d(0, 0, 0);
+      }
+  
+      :host([noink]) {
+        pointer-events: none;
+      }
+  
+      #background,
+      #waves,
+      .wave-container,
+      .wave {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+  
+      #background,
+      .wave {
+        opacity: 0;
+      }
+  
+      #waves,
+      .wave {
+        overflow: hidden;
+      }
+  
+      .wave-container,
+      .wave {
+        border-radius: 50%;
+      }
+  
+      :host(.circle) #background,
+      :host(.circle) #waves {
+        border-radius: 50%;
+      }
+  
+      :host(.circle) .wave-container {
+        overflow: hidden;
+      }
+    </style>
+    
     <div id="background"></div>
     <div id="waves"></div>
   </template>
@@ -23513,20 +23731,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script>
   (function() {
     var Utility = {
-      cssColorWithAlpha: function(cssColor, alpha) {
-        var parts = cssColor.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-
-        if (typeof alpha == 'undefined') {
-          alpha = 1;
-        }
-
-        if (!parts) {
-          return 'rgba(255, 255, 255, ' + alpha + ')';
-        }
-
-        return 'rgba(' + parts[1] + ', ' + parts[2] + ', ' + parts[3] + ', ' + alpha + ')';
-      },
-
       distance: function(x1, y1, x2, y2) {
         var xDelta = (x1 - x2);
         var yDelta = (y1 - y2);
@@ -23534,13 +23738,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return Math.sqrt(xDelta * xDelta + yDelta * yDelta);
       },
 
-      now: (function() {
-        if (window.performance && window.performance.now) {
-          return window.performance.now.bind(window.performance);
-        }
-
-        return Date.now;
-      })()
+      now: window.performance && window.performance.now ?
+          window.performance.now.bind(window.performance) : Date.now
     };
 
     /**
@@ -24386,6 +24585,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
 
           /**
+           * By default, the dropdown will constrain scrolling on the page
+           * to itself when opened.
+           * Set to true in order to prevent scroll from being constrained
+           * to the dropdown when it opens.
+           */
+          allowOutsideScroll: {
+            type: Boolean,
+            value: false
+          },
+
+          /**
            * We memoize the positionTarget bounding rectangle so that we can
            * limit the number of times it is queried per resize / relayout.
            * @type {?Object}
@@ -24505,7 +24715,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          * Overridden from `IronOverlayBehavior`.
          */
         _renderOpened: function() {
-          Polymer.IronDropdownScrollManager.pushScrollLock(this);
+          if (!this.allowOutsideScroll) {
+            Polymer.IronDropdownScrollManager.pushScrollLock(this);
+          }
+
           if (!this.noAnimations && this.animationConfig && this.animationConfig.open) {
             this.$.contentWrapper.classList.add('animating');
             this.playAnimation('open');
@@ -25195,7 +25408,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     </div>
 
-    <div id="checkboxLabel" aria-hidden="true"><content></content></div>
+    <div id="checkboxLabel"><content></content></div>
   </template>
 
   <script>
@@ -25701,77 +25914,82 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 </script>
 <dom-module id="paper-button" assetpath="../bower_components/paper-button/">
-
-  <style>
-
-    :host {
-      display: inline-block;
-      position: relative;
-      box-sizing: border-box;
-      min-width: 5.14em;
-      margin: 0 0.29em;
-      background: transparent;
-      text-align: center;
-      font: inherit;
-      text-transform: uppercase;
-      outline: none;
-      border-radius: 3px;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      -webkit-user-select: none;
-      user-select: none;
-      cursor: pointer;
-      z-index: 0;
-
-      @apply(--paper-button);
-    }
-
-    .keyboard-focus {
-      font-weight: bold;
-    }
-
-    :host([disabled]) {
-      background: #eaeaea;
-      color: #a8a8a8;
-      cursor: auto;
-      pointer-events: none;
-
-      @apply(--paper-button-disabled);
-    }
-
-    :host([noink]) paper-ripple {
-      display: none;
-    }
-
-    paper-material {
-      border-radius: inherit;
-    }
-
-    .content > ::content * {
-      text-transform: inherit;
-    }
-
-    .content {
-      padding: 0.7em 0.57em
-    }
-  </style>
-
   <template>
+
+    <style>
+      :host {
+        display: inline-block;
+        position: relative;
+        box-sizing: border-box;
+        min-width: 5.14em;
+        margin: 0 0.29em;
+        background: transparent;
+        text-align: center;
+        font: inherit;
+        text-transform: uppercase;
+        outline-width: 0;
+        border-radius: 3px;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        z-index: 0;
+        padding: 0.7em 0.57em;
+
+        @apply(--paper-button);
+      }
+
+      :host([raised]) .keyboard-focus {
+        font-weight: bold;
+        @apply(--paper-button-raised-keyboard-focus);
+      }
+
+      :host(:not([raised])) .keyboard-focus {
+        font-weight: bold;
+        @apply(--paper-button-flat-keyboard-focus);
+      }
+
+      :host([disabled]) {
+        background: #eaeaea;
+        color: #a8a8a8;
+        cursor: auto;
+        pointer-events: none;
+
+        @apply(--paper-button-disabled);
+      }
+
+      :host([noink]) paper-ripple {
+        display: none;
+      }
+
+      paper-ripple {
+        color: var(--paper-button-ink-color);
+      }
+
+      paper-material {
+        border-radius: inherit;
+        @apply(--layout-fit);
+      }
+
+      .content > ::content * {
+        text-transform: inherit;
+      }
+    </style>
 
     <paper-ripple></paper-ripple>
 
-    <paper-material class$="[[_computeContentClass(receivedFocusFromKeyboard)]]" elevation="[[_elevation]]" animated="">
+    <paper-material elevation="[[_elevation]]" animated=""></paper-material>
+
+    <div class$="[[_computeContentClass(receivedFocusFromKeyboard)]]">
       <content></content>
-    </paper-material>
+    </div>
 
   </template>
-
 </dom-module>
 
 <script>
-
   Polymer({
-
     is: 'paper-button',
 
     behaviors: [
@@ -25779,7 +25997,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     ],
 
     properties: {
-
       /**
        * If true, the button should be styled with a shadow.
        */
@@ -25807,7 +26024,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       return className;
     }
   });
-
 </script>
 <dom-module id="iron-a11y-announcer" assetpath="../bower_components/iron-a11y-announcer/">
   <style>
@@ -26031,183 +26247,180 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 })();
 </script>
 <dom-module id="paper-input-container" assetpath="../bower_components/paper-input/">
-
-  <style>
-
-    :host {
-      display: block;
-      padding: 8px 0;
-
-      @apply(--paper-input-container);
-    }
-
-    :host[inline] {
-      display: inline-block;
-    }
-
-    :host([disabled]) {
-      pointer-events: none;
-      opacity: 0.33;
-
-      @apply(--paper-input-container-disabled);
-    }
-
-    .floated-label-placeholder {
-      @apply(--paper-font-caption);
-    }
-
-    .underline {
-      position: relative;
-    }
-
-    .focused-line {
-      height: 2px;
-
-      -webkit-transform-origin: center center;
-      transform-origin: center center;
-      -webkit-transform: scale3d(0,1,1);
-      transform: scale3d(0,1,1);
-
-      background: var(--paper-input-container-focus-color, --default-primary-color);
-
-      @apply(--paper-input-container-underline-focus);
-    }
-
-    .underline.is-highlighted .focused-line {
-      -webkit-transform: none;
-      transform: none;
-      -webkit-transition: -webkit-transform 0.25s;
-      transition: transform 0.25s;
-
-      @apply(--paper-transition-easing);
-    }
-
-    .underline.is-invalid .focused-line {
-      background: var(--paper-input-container-invalid-color, --google-red-500);
-
-      -webkit-transform: none;
-      transform: none;
-      -webkit-transition: -webkit-transform 0.25s;
-      transition: transform 0.25s;
-
-      @apply(--paper-transition-easing);
-    }
-
-    .unfocused-line {
-      height: 1px;
-      background: var(--paper-input-container-color, --secondary-text-color);
-
-      @apply(--paper-input-container-underline);
-    }
-
-    :host([disabled]) .unfocused-line {
-      border-bottom: 1px dashed;
-      border-color: var(--paper-input-container-color, --secondary-text-color);
-      background: transparent;
-
-      @apply(--paper-input-container-underline-disabled);
-    }
-
-    .label-and-input-container {
-      @apply(--layout-flex);
-      @apply(--layout-relative);
-    }
-
-    .input-content {
-      position: relative;
-      @apply(--layout-horizontal);
-      @apply(--layout-end);
-    }
-
-    .input-content ::content label,
-    .input-content ::content .paper-input-label {
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      font: inherit;
-      color: var(--paper-input-container-color, --secondary-text-color);
-
-      @apply(--paper-font-subhead);
-      @apply(--paper-input-container-label);
-    }
-
-    .input-content.label-is-floating ::content label,
-    .input-content.label-is-floating ::content .paper-input-label {
-      -webkit-transform: translate3d(0, -75%, 0) scale(0.75);
-      transform: translate3d(0, -75%, 0) scale(0.75);
-      -webkit-transform-origin: left top;
-      transform-origin: left top;
-      -webkit-transition: -webkit-transform 0.25s;
-      transition: transform 0.25s;
-
-      @apply(--paper-transition-easing);
-    }
-
-    .input-content.label-is-highlighted ::content label,
-    .input-content.label-is-highlighted ::content .paper-input-label {
-      color: var(--paper-input-container-focus-color, --default-primary-color);
-
-      @apply(--paper-input-container-label-focus);
-    }
-
-    .input-content.is-invalid ::content label,
-    .input-content.is-invalid ::content .paper-input-label {
-      color: var(--paper-input-container-invalid-color, --google-red-500);
-    }
-
-    .input-content.label-is-hidden ::content label,
-    .input-content.label-is-hidden ::content .paper-input-label {
-      visibility: hidden;
-    }
-
-    .input-content ::content input,
-    .input-content ::content textarea,
-    .input-content ::content iron-autogrow-textarea,
-    .input-content ::content .paper-input-input {
-      position: relative; /* to make a stacking context */
-      outline: none;
-      box-shadow: none;
-      padding: 0;
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: var(--paper-input-container-input-color, --primary-text-color);
-
-      @apply(--paper-font-subhead);
-      @apply(--paper-input-container-input);
-    }
-
-    ::content [prefix] {
-      @apply(--paper-font-subhead);
-      @apply(--paper-input-prefix);
-    }
-
-    ::content [suffix] {
-      @apply(--paper-font-subhead);
-      @apply(--paper-input-suffix);
-    }
-
-    /* Firefox sets a min-width on the input, which can cause layout issues */
-    .input-content ::content input {
-      min-width: 0;
-    }
-
-    .input-content ::content textarea {
-      resize: none;
-    }
-
-    .add-on-content.is-invalid ::content * {
-      color: var(--paper-input-container-invalid-color, --google-red-500);
-    }
-
-    .add-on-content.is-highlighted ::content * {
-      color: var(--paper-input-container-focus-color, --default-primary-color);
-    }
-
-  </style>
-
   <template>
+
+    <style>
+      :host {
+        display: block;
+        padding: 8px 0;
+
+        @apply(--paper-input-container);
+      }
+
+      :host[inline] {
+        display: inline-block;
+      }
+
+      :host([disabled]) {
+        pointer-events: none;
+        opacity: 0.33;
+
+        @apply(--paper-input-container-disabled);
+      }
+
+      .floated-label-placeholder {
+        @apply(--paper-font-caption);
+      }
+
+      .underline {
+        position: relative;
+      }
+
+      .focused-line {
+        height: 2px;
+
+        -webkit-transform-origin: center center;
+        transform-origin: center center;
+        -webkit-transform: scale3d(0,1,1);
+        transform: scale3d(0,1,1);
+
+        background: var(--paper-input-container-focus-color, --default-primary-color);
+
+        @apply(--paper-input-container-underline-focus);
+      }
+
+      .underline.is-highlighted .focused-line {
+        -webkit-transform: none;
+        transform: none;
+        -webkit-transition: -webkit-transform 0.25s;
+        transition: transform 0.25s;
+
+        @apply(--paper-transition-easing);
+      }
+
+      .underline.is-invalid .focused-line {
+        background: var(--paper-input-container-invalid-color, --google-red-500);
+
+        -webkit-transform: none;
+        transform: none;
+        -webkit-transition: -webkit-transform 0.25s;
+        transition: transform 0.25s;
+
+        @apply(--paper-transition-easing);
+      }
+
+      .unfocused-line {
+        height: 1px;
+        background: var(--paper-input-container-color, --secondary-text-color);
+
+        @apply(--paper-input-container-underline);
+      }
+
+      :host([disabled]) .unfocused-line {
+        border-bottom: 1px dashed;
+        border-color: var(--paper-input-container-color, --secondary-text-color);
+        background: transparent;
+
+        @apply(--paper-input-container-underline-disabled);
+      }
+
+      .label-and-input-container {
+        @apply(--layout-flex);
+        @apply(--layout-relative);
+      }
+
+      .input-content {
+        position: relative;
+        @apply(--layout-horizontal);
+        @apply(--layout-end);
+      }
+
+      .input-content ::content label,
+      .input-content ::content .paper-input-label {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        font: inherit;
+        color: var(--paper-input-container-color, --secondary-text-color);
+
+        @apply(--paper-font-subhead);
+        @apply(--paper-input-container-label);
+      }
+
+      .input-content.label-is-floating ::content label,
+      .input-content.label-is-floating ::content .paper-input-label {
+        -webkit-transform: translate3d(0, -75%, 0) scale(0.75);
+        transform: translate3d(0, -75%, 0) scale(0.75);
+        -webkit-transform-origin: left top;
+        transform-origin: left top;
+        -webkit-transition: -webkit-transform 0.25s;
+        transition: transform 0.25s;
+
+        @apply(--paper-transition-easing);
+      }
+
+      .input-content.label-is-highlighted ::content label,
+      .input-content.label-is-highlighted ::content .paper-input-label {
+        color: var(--paper-input-container-focus-color, --default-primary-color);
+
+        @apply(--paper-input-container-label-focus);
+      }
+
+      .input-content.is-invalid ::content label,
+      .input-content.is-invalid ::content .paper-input-label {
+        color: var(--paper-input-container-invalid-color, --google-red-500);
+      }
+
+      .input-content.label-is-hidden ::content label,
+      .input-content.label-is-hidden ::content .paper-input-label {
+        visibility: hidden;
+      }
+
+      .input-content ::content input,
+      .input-content ::content textarea,
+      .input-content ::content iron-autogrow-textarea,
+      .input-content ::content .paper-input-input {
+        position: relative; /* to make a stacking context */
+        outline: none;
+        box-shadow: none;
+        padding: 0;
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--paper-input-container-input-color, --primary-text-color);
+
+        @apply(--paper-font-subhead);
+        @apply(--paper-input-container-input);
+      }
+
+      ::content [prefix] {
+        @apply(--paper-font-subhead);
+        @apply(--paper-input-prefix);
+      }
+
+      ::content [suffix] {
+        @apply(--paper-font-subhead);
+        @apply(--paper-input-suffix);
+      }
+
+      /* Firefox sets a min-width on the input, which can cause layout issues */
+      .input-content ::content input {
+        min-width: 0;
+      }
+
+      .input-content ::content textarea {
+        resize: none;
+      }
+
+      .add-on-content.is-invalid ::content * {
+        color: var(--paper-input-container-invalid-color, --google-red-500);
+      }
+
+      .add-on-content.is-highlighted ::content * {
+        color: var(--paper-input-container-focus-color, --default-primary-color);
+      }
+    </style>
 
     <template is="dom-if" if="[[!noLabelFloat]]">
       <div class="floated-label-placeholder">&nbsp;</div>
@@ -26231,18 +26444,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
 
   </template>
-
 </dom-module>
 
 <script>
-(function() {
-
   Polymer({
-
     is: 'paper-input-container',
 
     properties: {
-
       /**
        * Set to true to disable the floating label. The label disappears when the input value is
        * not null.
@@ -26340,7 +26548,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           return this._onValueChanged.bind(this);
         }
       }
-
     },
 
     listeners: {
@@ -26519,46 +26726,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       return cls;
     }
-
   });
-
-})();
 </script>
 <dom-module id="paper-input-error" assetpath="../bower_components/paper-input/">
-
-  <style>
-
-    :host {
-      display: inline-block;
-      visibility: hidden;
-      float: left;
-
-      color: var(--paper-input-container-invalid-color, --google-red-500);
-
-      @apply(--paper-font-caption);
-      @apply(--paper-input-error);
-    }
-
-    :host([invalid]) {
-      visibility: visible;
-    };
-
-  </style>
-
   <template>
+
+    <style>
+      :host {
+        display: inline-block;
+        visibility: hidden;
+        float: left;
+
+        color: var(--paper-input-container-invalid-color, --google-red-500);
+
+        @apply(--paper-font-caption);
+        @apply(--paper-input-error);
+      }
+
+      :host([invalid]) {
+        visibility: visible;
+      };
+    </style>
 
     <content></content>
 
   </template>
-
 </dom-module>
 
 <script>
-
-(function() {
-
   Polymer({
-
     is: 'paper-input-error',
 
     behaviors: [
@@ -26566,7 +26762,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     ],
 
     properties: {
-
       /**
        * True if the error is showing.
        */
@@ -26575,46 +26770,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         reflectToAttribute: true,
         type: Boolean
       }
-
     },
 
     update: function(state) {
       this._setInvalid(state.invalid);
     }
-
-  })
-
-})();
-
+  });
 </script>
 <dom-module id="paper-input-char-counter" assetpath="../bower_components/paper-input/">
-
-  <style>
-
-    :host {
-      display: inline-block;
-      float: right;
-
-      @apply(--paper-font-caption);
-      @apply(--paper-input-char-counter);
-    }
-
-  </style>
-
   <template>
+
+    <style>
+      :host {
+        display: inline-block;
+        float: right;
+
+        @apply(--paper-font-caption);
+        @apply(--paper-input-char-counter);
+      }
+    </style>
 
     <span>[[_charCounterStr]]</span>
 
   </template>
-
 </dom-module>
 
 <script>
-
-(function() {
-
   Polymer({
-
     is: 'paper-input-char-counter',
 
     behaviors: [
@@ -26622,12 +26804,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     ],
 
     properties: {
-
       _charCounterStr: {
         type: String,
         value: '0'
       }
-
     },
 
     update: function(state) {
@@ -26645,39 +26825,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       this._charCounterStr = str;
     }
-
   });
-
-})();
-
 </script>
 <dom-module id="paper-input" assetpath="../bower_components/paper-input/">
-
-  <style>
-
-    :host {
-      display: block;
-    }
-
-    input::-webkit-input-placeholder {
-      color: var(--paper-input-container-color, --secondary-text-color);
-    }
-
-    input:-moz-placeholder {
-      color: var(--paper-input-container-color, --secondary-text-color);
-    }
-
-    input::-moz-placeholder {
-      color: var(--paper-input-container-color, --secondary-text-color);
-    }
-
-    input:-ms-input-placeholder {
-      color: var(--paper-input-container-color, --secondary-text-color);
-    }
-
-  </style>
-
   <template>
+
+    <style>
+      :host {
+        display: block;
+      }
+
+      input::-webkit-input-placeholder {
+        color: var(--paper-input-container-color, --secondary-text-color);
+      }
+
+      input:-moz-placeholder {
+        color: var(--paper-input-container-color, --secondary-text-color);
+      }
+
+      input::-moz-placeholder {
+        color: var(--paper-input-container-color, --secondary-text-color);
+      }
+
+      input:-ms-input-placeholder {
+        color: var(--paper-input-container-color, --secondary-text-color);
+      }
+    </style>
 
     <paper-input-container no-label-float="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]" auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]">
 
@@ -26685,7 +26858,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <label hidden$="[[!label]]">[[label]]</label>
 
-      <input is="iron-input" id="input" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]" bind-value="{{value}}" invalid="{{invalid}}" prevent-invalid-input="[[preventInvalidInput]]" allowed-pattern="[[allowedPattern]]" validator="[[validator]]" type$="[[type]]" pattern$="[[pattern]]" required$="[[required]]" autocomplete$="[[autocomplete]]" autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" minlength$="[[minlength]]" maxlength$="[[maxlength]]" min$="[[min]]" max$="[[max]]" step$="[[step]]" name$="[[name]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]" list$="[[list]]" size$="[[size]]" autocapitalize$="[[autocapitalize]]" autocorrect$="[[autocorrect]]">
+      <input is="iron-input" id="input" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]" bind-value="{{value}}" invalid="{{invalid}}" prevent-invalid-input="[[preventInvalidInput]]" allowed-pattern="[[allowedPattern]]" validator="[[validator]]" type$="[[type]]" pattern$="[[pattern]]" required$="[[required]]" autocomplete$="[[autocomplete]]" autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" minlength$="[[minlength]]" maxlength$="[[maxlength]]" min$="[[min]]" max$="[[max]]" step$="[[step]]" name$="[[name]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]" list$="[[list]]" size$="[[size]]" autocapitalize$="[[autocapitalize]]" autocorrect$="[[autocorrect]]" on-change="_onChange">
 
       <content select="[suffix]"></content>
 
@@ -26700,15 +26873,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </paper-input-container>
 
   </template>
-
 </dom-module>
 
 <script>
-
-(function() {
-
   Polymer({
-
     is: 'paper-input',
 
     behaviors: [
@@ -26716,72 +26884,55 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer.PaperInputBehavior,
       Polymer.IronControlState
     ]
-
-  })
-
-})();
-
+  });
 </script>
-<dom-module id="paper-item" assetpath="../bower_components/paper-item/">
-
-  <style>
-/*
-    @license
-    Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-    Code distributed by Google as part of the polymer project is also
-    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
-*/
-
-:host {
-  display: block;
-  min-height: var(--paper-item-min-height, 48px);
-  padding: 0px 16px;
-}
-
-:host > ::content > *:not(:first-child):not(:last-child) {
-  margin-right: 16px;
-}
-
-</style>
-
-  <style>
-
-    :host {
-      @apply(--layout-horizontal);
-      @apply(--layout-center);
-      @apply(--paper-font-subhead);
-
-      @apply(--paper-item);
-    }
-
-  </style>
-
+<dom-module id="paper-item-shared-styles" assetpath="../bower_components/paper-item/">
   <template>
+    <style>
+      :host {
+        display: block;
+        min-height: var(--paper-item-min-height, 48px);
+        padding: 0px 16px;
+      }
+
+      :host > ::content > *:not(:first-child):not(:last-child) {
+        margin-right: 16px;
+      }
+    </style>
+  </template>
+</dom-module>
+<dom-module id="paper-item" assetpath="../bower_components/paper-item/">
+  <template>
+    <style include="paper-item-shared-styles"></style>
+    <style>
+      :host {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        @apply(--paper-font-subhead);
+
+        @apply(--paper-item);
+      }
+    </style>
+
     <content></content>
   </template>
 
+  <script>
+    Polymer({
+      is: 'paper-item',
+
+      hostAttributes: {
+        role: 'listitem',
+        tabindex: '0'
+      },
+
+      behaviors: [
+        Polymer.IronControlState,
+        Polymer.IronButtonState
+      ]
+    });
+  </script>
 </dom-module>
-
-<script>
-
-(function() {
-
-  Polymer({
-
-    is: 'paper-item',
-
-    hostAttributes: {
-      role: 'listitem'
-    }
-
-  });
-
-})();
-
-</script>
 <dom-module id="paper-menu" assetpath="../bower_components/paper-menu/">
   <style>
 /**
@@ -27086,7 +27237,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <paper-icon-button icon="paper-tabs:chevron-left" class$="[[_computeScrollButtonClass(_leftHidden, scrollable, hideScrollButtons)]]" on-up="_onScrollButtonUp" on-down="_onLeftScrollButtonDown"></paper-icon-button>
 
-    <div id="tabsContainer" class="flex" on-scroll="_scroll">
+    <div id="tabsContainer" class="flex" on-track="_scroll" on-down="_down">
 
       <div id="tabsContent" class$="[[_computeTabsContentClass(scrollable)]]">
 
@@ -27221,6 +27372,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       'iron-deselect': '_onIronDeselect'
     },
 
+    ready: function() {
+      this.setScrollDirection('y', this.$.tabsContainer);
+    },
+
     _computeScrollButtonClass: function(hideThisButton, scrollable, hideScrollButtons) {
       if (!scrollable || hideScrollButtons) {
         return 'hidden';
@@ -27275,24 +27430,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       );
     },
 
-    _scroll: function() {
-      var scrollLeft;
 
+    _scroll: function(e, detail) {
       if (!this.scrollable) {
         return;
       }
 
-      scrollLeft = this.$.tabsContainer.scrollLeft;
+      var ddx = (detail && -detail.ddx) || 0;
+      this._affectScroll(ddx);
+    },
+
+    _down: function(e) {
+      // go one beat async to defeat IronMenuBehavior
+      // autorefocus-on-no-selection timeout
+      this.async(function() {
+        if (this._defaultFocusAsync) {
+          this.cancelAsync(this._defaultFocusAsync);
+          this._defaultFocusAsync = null;
+        }
+      }, 1);
+    },
+
+    _affectScroll: function(dx) {
+      this.$.tabsContainer.scrollLeft += dx;
+
+      var scrollLeft = this.$.tabsContainer.scrollLeft;
 
       this._leftHidden = scrollLeft === 0;
       this._rightHidden = scrollLeft === this._tabContainerScrollSize;
     },
 
     _onLeftScrollButtonDown: function() {
+      this._scrollToLeft();
       this._holdJob = setInterval(this._scrollToLeft.bind(this), this._holdDelay);
     },
 
     _onRightScrollButtonDown: function() {
+      this._scrollToRight();
       this._holdJob = setInterval(this._scrollToRight.bind(this), this._holdDelay);
     },
 
@@ -27302,11 +27476,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     },
 
     _scrollToLeft: function() {
-      this.$.tabsContainer.scrollLeft -= this._step;
+      this._affectScroll(-this._step);
     },
 
     _scrollToRight: function() {
-      this.$.tabsContainer.scrollLeft += this._step;
+      this._affectScroll(this._step);
     },
 
     _tabChanged: function(tab, old) {
@@ -27408,6 +27582,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--paper-card);
       }
 
+      paper-material {
+        border-radius: inherit;
+        @apply(--layout-fit);
+      }
+
       /* IE 10 support for HTML5 hidden attr */
       [hidden] {
         display: none !important;
@@ -27452,16 +27631,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <paper-material id="shadow" animated$="[[animatedShadow]]" elevation="[[elevation]]">
-      <div class="header">
-        <img hidden$="[[!image]]" src="[[image]]">
-        <div hidden$="[[!heading]]" class$="[[_computeHeadingClass(image)]]">[[heading]]</div>
-      </div>
+    <paper-material animated$="[[animatedShadow]]" elevation="[[elevation]]"></paper-material>
 
-      <content></content>
+    <div class="header">
+      <img hidden$="[[!image]]" src="[[image]]">
+      <div hidden$="[[!heading]]" class$="[[_computeHeadingClass(image)]]">[[heading]]</div>
+    </div>
 
-    </paper-material>
-
+    <content></content>
   </template>
 
 </dom-module>
@@ -27532,6 +27709,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       -moz-user-select: none;
       -ms-user-select: none;
       -webkit-user-select: none;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
       user-select: none;
       cursor: pointer;
 
@@ -27626,7 +27804,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        */
       mini: {
         type: Boolean,
-        value: false
+        value: false,
+        reflectToAttribute: true
       }
     },
 
@@ -30031,6 +30210,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <a data-route="blog" href="#!/blog" class="nav-link horizontal center-center layout">Blog</a>
                         </paper-tab>
                         <paper-tab class="text-u-c">
+                            <a data-route="schedule" href="#!/schedule" class="nav-link horizontal center-center layout">Schedule</a>
+                        </paper-tab>
+                        <paper-tab class="text-u-c">
                             <a data-route="speakers" href="#!/speakers" class="nav-link horizontal center-center layout">Speakers</a>
                         </paper-tab>
                         <paper-tab class="text-u-c" style="width: 300px;">
@@ -32034,6 +32216,708 @@ Polymer({
         }
     });
 </script>
+<dom-module id="session-dialog" assetpath="session-dialog/">
+    <template>
+        <style include="tags-color"></style>
+        <style>
+            :host {
+                display: block;
+                z-index: 9;
+                height: 100%;
+                --paper-card: #fff;
+            }
+
+            paper-scroll-header-panel {
+                background: #fff;
+                height: 100%;
+                --paper-scroll-header-panel-condensed-header: {
+                    background-color: var(--default-primary-color);
+                }
+                ;
+            }
+
+            paper-toolbar {
+                background-color: transparent;
+                color: #fff;
+            }
+
+            paper-toolbar .title {
+                margin: 0;
+            }
+
+            .card-actions {
+                border-top: 1px solid #e8e8e8;
+            }
+
+            .subtitle {
+                margin-bottom: 5px;
+                font-size: 16px;
+                color: var(--secondary-text-color);
+            }
+
+            .content {
+                padding: 16px 10px 0;
+            }
+
+            .session-description {
+                padding-top: 0;
+            }
+
+            .badge {
+                color: var(--secondary-text-color);
+                font-size: 14px;
+            }
+
+            .session-tags {
+                margin-bottom: 10px;
+                padding-top: 0;
+                padding-bottom: 0;
+                color: var(--secondary-text-color);
+                font-size: 16px;
+            }
+
+            .tags-label {
+                font-weight: 400;
+                font-size: 14px;
+            }
+
+            .tag {
+                margin-left: 5px;
+            }
+
+            .speaker {
+                padding: 20px 0;
+                border-top: 1px solid #e8e8e8;
+            }
+
+            .speaker-meta {
+                margin-right: 10px;
+                font-size: 14px;
+            }
+
+            .speaker-title {
+                font-size: 22px;
+                font-weight: 400;
+            }
+
+            @media (min-width: 768px) {
+                paper-card {
+                    width: 70%;
+                }
+                .session-img {
+                    height: 130px;
+                    width: 130px;
+                    margin-top: -70px;
+                    border: 2px solid #fff;
+                }
+                .session-detail {
+                    margin-top: -10px;
+                    margin-left: 15px;
+                }
+                .name {
+                    font-size: 22px;
+                    color: var(--default-primary-color);
+                }
+                .title {
+                    font-size: 14px;
+                }
+            }
+        </style>
+        <div class="relative layout horizontal center-justified hidden-xs">
+            <paper-card>
+                <div class="paper-card-container">
+                    <div class="card-content layout horizontal">
+                        <div class="session-detail flex layout vertical center-center">
+                            <span class="name self-start">[[session.title]]</span>
+                            <div class="title self-start">
+                                <span>[[session.time]]</span>,
+                                <span>[[session.complexity]]</span>
+                            </div>
+                        </div>
+                        <div class="flex"></div>
+                        <div>
+                            <paper-icon-button class="back-button" on-tap="closeSession" icon="close"></paper-icon-button>
+                        </div>
+                    </div>
+                    <div class="card-content session-tags">
+                        <span class="tags-label">Tags:</span>
+                        <template is="dom-repeat" items="[[tags]]" as="tag">
+                            <span class$="[[tag.tagClass]]">[[tag.name]]</span>
+                        </template>
+                    </div>
+                    <div class="card-content session-description">
+                        <marked-element markdown="[[session.description]]"></marked-element>
+                    </div>
+                    <div class="card-content speakers">
+                        <template is="dom-repeat" items="[[session.speakerList]]" as="speaker">
+                              <div class="speaker" on-tap="navigateToSpeaker">
+                                  <h3 class="speaker-title">[[speaker.name]]</h3>
+                                  <span class="speaker-meta">
+                                      <span>[[speaker.company]]</span>,
+                                      <span>[[speaker.title]]</span>
+                                  </span>
+                                  <marked-element markdown="[[speaker.bio]]"></marked-element>
+                              </div>
+                        </template>
+                    </div>
+                </div>
+            </paper-card>
+        </div>
+        <paper-scroll-header-panel id="scrollHeaderPanel" class="visible-xs fit" condenses="" keep-condensed-header="">
+            <paper-toolbar class="tall">
+                <paper-icon-button class="back-button" on-tap="closeSession" icon="arrow-back"></paper-icon-button>
+                <div id="title" class="bottom title">[[session.title]]</div>
+            </paper-toolbar>
+            <div class="content">
+                <div class="subtitle">
+                    <span>[[session.time]]</span>,
+                    <span>[[session.complexity]]</span>
+                </div>
+                <div class="card-content session-tags">
+                    <span class="tags-label">Tags:</span>
+                    <template is="dom-repeat" items="[[tags]]" as="tag">
+                        <span class$="[[tag.tagClass]]">[[tag.name]]</span>
+                    </template>
+                </div>
+                <div class="card-content session-description">
+                    <marked-element markdown="[[session.description]]"></marked-element>
+                </div>
+                <div class="card-content speakers">
+                    <template is="dom-repeat" items="[[session.speakerList]]" as="speaker">
+                          <div class="speaker" on-tap="navigateToSpeaker">
+                            <h3 class="speaker-title">[[speaker.name]]</h3>
+                            <span class="speaker-meta">
+                                <span>[[speaker.company]]</span>,
+                                <span>[[speaker.title]]</span>
+                            </span>
+                            <marked-element markdown="[[speaker.bio]]"></marked-element>
+                          </div>
+                    </template>
+                </div>
+            </div>
+        </paper-scroll-header-panel>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: 'session-dialog',
+        properties: {
+            session: {
+                type: Object,
+                observer: '_sessionChanged'
+            },
+            opened: {
+                type: Boolean,
+                notify: true
+            },
+            testClass: String
+        },
+        ready: function() {
+            var title = this.$.title;
+            addEventListener('paper-header-transform', function(e) {
+                var d = e.detail;
+                var m = d.height - d.condensedHeight;
+                var transform = 50 * d.y / m;
+                Polymer.Base.transform('translate3d(' + transform + 'px,0,0)', title);
+            });
+        },
+        _sessionChanged: function() {
+            this.$.scrollHeaderPanel.$.headerBg.style.background = 'linear-gradient(to top, rgba(0, 0, 0, 0.4) -10%, rgba(0, 0, 0, 0.1) 50%), url(' + this.session.photoUrl + ') 0 / cover no-repeat';
+            // var panelClass = 'visible-xs fit ' + app.generateClass(this.session.tags[0]);
+            // this.set('session.panelClass', panelClass);
+            // this.toggleClass(app.generateClass(this.session.tags[0]), true, this.$.scrollHeaderPanel);
+            this.async(function() {
+                this.$.scrollHeaderPanel.measureHeaderHeight();
+                this.$.scrollHeaderPanel.scroller.scrollTop = 0;
+            });
+            var tempTags = [];
+            for (var i = 0; i < this.session.tags.length; i++) {
+                var tagName = this.session.tags[i],
+                    tagClass = app.generateClass(tagName);
+                tempTags.push({
+                    name: tagName,
+                    tagClass: 'tag tag-label ' + tagClass
+                });
+            }
+            this.tags = tempTags;
+        },
+        navigateToSpeaker: function() {
+          //TODO
+        },
+        closeSession: function() {
+            this.opened = false;
+        }
+    });
+</script>
+<dom-module id="schedule-block" assetpath="schedule-block/">
+    <template>
+        <style include="tags-color"></style>
+        <style>
+            :host {
+                display: block;
+                --paper-card: {
+                    background: transparent;
+                }
+                ;
+                --paper-card-content: {
+                    background: #fff;
+                }
+                ;
+                --paper-card-actions: {
+                    background: #fff;
+                }
+                ;
+            }
+
+            .person-wrapper {
+                display: none;
+            }
+
+            .bottom-session-text {
+                padding: 16px;
+                position: absolute;
+                bottom: 0;
+                color: #000;
+            }
+
+            paper-material {
+                background: #fff;
+            }
+
+            .card-content {
+                padding: 16px;
+            }
+
+            .people-name {
+                font-size: 24px;
+                font-weight: 300;
+            }
+
+            .title {
+                margin-top: -5px;
+                font-size: 14px;
+                font-weight: 300;
+            }
+
+            .speakers h3:not(:last-of-type) {
+                margin-bottom: 10px;
+            }
+
+            .session-title {
+                font-size: 18px;
+            }
+
+            .card-wrapper {
+                margin-bottom: 20px;
+            }
+
+            .card-content {
+                padding: 16px;
+            }
+
+            .card-actions {
+                border-top: 1px solid #e8e8e8;
+                padding: 5px 16px;
+                position: relative;
+            }
+
+            .card-wrapper {
+                margin-bottom: 20px;
+            }
+
+            .people-header {
+                height: 256px;
+            }
+
+            .people-image-overlay {
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 4%, rgba(0, 0, 0, 0) 50%);
+            }
+
+            .badges {
+                margin: 0;
+                padding: 15px;
+                list-style: none;
+            }
+
+            .badge {
+                display: inline-block;
+            }
+
+            .badge:not(:last-of-type):after {
+                color: rgba(255, 255, 255, 0.8);
+                vertical-align: middle;
+                font-size: 14px;
+                content: "\2022";
+            }
+
+            .badge a {
+                color: #fff;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .people-description {
+                padding-bottom: 0;
+            }
+
+            .brief {
+                margin-bottom: 16px;
+                display: block;
+                display: -webkit-box;
+                overflow: hidden;
+                font-size: 17px height: 85px;
+                text-overflow: ellipsis;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+            }
+
+            .filters {
+                margin-bottom: 20px;
+            }
+
+            .filters .card-content {
+                border-bottom: 1px solid #eee;
+            }
+
+            .filters .header {
+                font-size: 20px;
+                font-weight: 400;
+            }
+
+            .filters .card-actions {
+                border: 0;
+            }
+
+            .selector-group > * {
+                padding: 14px 16px;
+            }
+
+            @media (max-width: 767px) {
+                .person-wrapper,
+                .person {
+                    @apply(--layout-fit);
+                }
+                .side-menu {
+                    order: -1;
+                }
+                .filters .card-actions {
+                    text-align: right;
+                }
+            }
+
+            @media (min-width: 768px) {
+                .card-wrapper {
+                    width: calc(100% / 3);
+                }
+                .card-wrapper paper-material {
+                    margin: 0 10px;
+                }
+                .side-menu {
+                    padding-left: 20px;
+                }
+            }
+        </style>
+        <iron-ajax auto="" url="[[source]]" handle-as="json" last-response="{{peopleTemp}}"></iron-ajax>
+        <iron-ajax auto="" url="[[sessionsSource]]" handle-as="json" last-response="{{sessions}}"></iron-ajax>
+        <div id="people" class="container flex layout vertical">
+            <div class="layout vertical-horizontal">
+                <div class="flex">
+                    <div class="layout vertical-horizontal wrap">
+                        <template id="sessionList" is="dom-repeat" items="[[people]]" as="session" filter="checkHiding">
+                            <div class="card-wrapper layout horizontal" hidden$="{{session.hide}}">
+                                <paper-material class="flex pointer" on-tap="readMore">
+                                    <div class="people-header relative">
+                                        <div class="bottom-session-text">
+                                            <span class="people-name relative">[[session.title]]</span>
+                                            <div class="title">
+                                                <span>[[session.time]]</span>,
+                                                <span>[[session.complexity]]</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-content flex speakers">
+                                        <template is="dom-repeat" items="[[session.speakerList]]" as="speaker">
+                                            <h3 class="session-title">[[speaker.name]]</h3>
+                                        </template>
+                                    </div>
+                                    <!-- <div class="card-actions">
+                            <paper-button on-tap="readMore">Open details</paper-button>
+                        </div> -->
+                                </paper-material>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <div id="sideMenu" class="side-menu layout vertical">
+                    <paper-card class="filters">
+                        <div class="card-content header">
+                            <div class="title-text">Filters</div>
+                        </div>
+                        <div class="card-content">
+                            <div id="tagFilter" class="selector-group layout horizontal-vertical wrap">
+                                <template is="dom-repeat" items="{{tags}}" as="filter">
+                                    <paper-checkbox class$="[[filter.className]]" on-change="_filter" checked="">[[filter.name]]</paper-checkbox>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div id="badgeFilter" class="selector-group layout horizontal-vertical">
+                                <template is="dom-repeat" items="[[badges]]" as="filter">
+                                    <paper-checkbox class$="[[filter.className]]" on-change="_filter" checked="">[[filter.name]]</paper-checkbox>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <paper-button on-tap="_toggleFilters">{{toggleFiltersButton.title}}</paper-button>
+                        </div>
+                    </paper-card>
+                </div>
+            </div>
+        </div>
+        <div id="personCon" class="person-wrapper container relative">
+            <session-dialog id="person" class="person flex" session="{{selectedPerson}}" opened="{{opened}}"></session-dialog>
+        </div>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: 'schedule-block',
+        behaviors: [
+            Polymer.NeonAnimatableBehavior,
+            Polymer.NeonAnimationRunnerBehavior
+        ],
+        properties: {
+            source: String,
+            sessionsSource: String,
+            tags: Array,
+            badges: Array,
+            filters: {
+                type: Array,
+                value: []
+            },
+            opened: {
+                type: Boolean,
+                observer: '_openedChanged'
+            },
+            toggleFiltersButton: {
+                type: Object,
+                value: function() {
+                    return {
+                        title: 'Clear All',
+                        selectAll: false
+                    };
+                }
+            },
+            animationConfig: {
+                value: function() {
+                    return {
+                        'loadSchedule': {
+                            name: 'cascaded-animation',
+                            animation: 'transform-animation',
+                            transformFrom: 'translateY(100%)',
+                            transformTo: 'none',
+                            nodedelay: 250,
+                            timing: {
+                                duration: 1500
+                            }
+                        },
+                        'unloadSchedule': {
+                            name: 'fade-out-animation',
+                            node: this.$.people,
+                            timing: {
+                                duration: 200
+                            }
+                        },
+                        'openSession': {
+                            name: 'scale-up-animation',
+                            node: this.$.person,
+                            timing: {
+                                duration: 500
+                            }
+                        },
+                        'closeSession': {
+                            name: 'fade-out-animation',
+                            node: this.$.person,
+                            timing: {
+                                duration: 500
+                            }
+                        }
+                    };
+                }
+            }
+        },
+        observers: [
+            'generateSessions(peopleTemp, sessions)'
+        ],
+        listeners: {
+            'neon-animation-finish': '_onNeonAnimationFinish'
+        },
+        generateSessions: function(peopleTemp, sessions) {
+
+          for (var i = 0; i < sessions.length; i++) {
+              sessions[i].speakerList = [];
+              for (var j = 0; j < peopleTemp.length; j++) {
+                  if (sessions[i].speakers.indexOf(peopleTemp[j].id) > -1) {
+                    sessions[i].speakerList.push(peopleTemp[j]);
+                  }
+              }
+          }
+
+            sessions.sort(function(p1, p2){
+              if (! p1.time) {
+                p1.time = '';
+              }
+              if (! p2.time) {
+                p2.time = '';
+              }
+              return p1.time.localeCompare(p2.time);
+            });
+            this.people = sessions;
+
+            this._generateFilters();
+
+            this.async(function() {
+                var nodeList = this.$.people.querySelectorAll('.card-wrapper');
+                this.animationConfig.loadSchedule.nodes = Array.prototype.slice.call(nodeList);
+                if (!this.checkUrlParams()) {
+                    this.playLoadAnimation();
+                }
+            });
+        },
+        checkUrlParams: function() {
+            if (app.params && app.params.id) {
+                var person = app.findByPropertyValue(this.people, 'id', app.params.id);
+                if (person !== undefined && person !== null) {
+                    this.openSession(person);
+                    return true;
+                }
+            }
+        },
+        _generateFilters: function() {
+            var tempTags = [];
+            var tempBadges = [];
+            for (var i = 0; i < this.people.length; i++) {
+                tempTags = this._generateFilterArray(tempTags, this.people[i].tags);
+                if (this.people[i].badges === undefined) {
+                    this.people[i].badges = [];
+                }
+                tempBadges = this._generateFilterArray(tempBadges, this.people[i].badges, 'name');
+            }
+            this.tags = tempTags;
+            this.badges = tempBadges;
+        },
+        _generateFilterArray: function(filters, array, property) {
+            for (var i = 0; i < array.length; i++) {
+                var name = array[i];
+                if (property !== undefined) {
+                    name = array[i][property];
+                }
+                var className = app.generateClass(name);
+                if (!app.findByPropertyValue(filters, 'className', className)) {
+                    filters.push({
+                        name: name,
+                        className: className
+                    });
+                    this.filters.push(name);
+                }
+            }
+            return filters;
+        },
+
+        playLoadAnimation: function() {
+            this.cancelAnimation();
+            this.playAnimation('loadSchedule');
+        },
+        readMore: function(event) {
+            page.redirect('/schedule/' + event.model.session.id);
+            this.openSession(event.model.session);
+        },
+        openSession: function(person) {
+            this.opened = true;
+            this.selectedPerson = person;
+            this.$.personCon.style.display = 'block';
+            this.cancelAnimation();
+            this.playAnimation('openSession');
+            if (screen.width > 768) {
+                this.playAnimation('unloadSchedule');
+            }
+        },
+        closeSession: function() {
+            page('/schedule');
+            this.opened = false;
+            this.cancelAnimation();
+            this.playAnimation('closeSession');
+        },
+        _onNeonAnimationFinish: function() {
+            if (this.opened && screen.width > 768) {
+                this.$.people.style.display = 'none';
+                this.$.people.style.position = 'absolute';
+            }
+            if (!this.opened) {
+                this.$.personCon.style.display = 'none';
+                if (screen.width > 768) {
+                    this.$.people.style.display = 'flex';
+                    this.$.people.style.position = 'relative';
+                }
+            }
+        },
+        _openedChanged: function() {
+            if (!this.opened) {
+                this.closeSession();
+            }
+        },
+        _toggleFilters: function() {
+            this._toggleFilter(this.$.tagFilter.children, this.tags);
+            this._toggleFilter(this.$.badgeFilter.children, this.badges);
+            for (var k = 0; k < this.people.length; k++) {
+                this.people[k].hide = this._matchesFilters(this.people[k]);
+            }
+            this.set('toggleFiltersButton.title', this.toggleFiltersButton.selectAll ? 'Clear All' : 'Select All');
+            this.toggleFiltersButton.selectAll = !this.toggleFiltersButton.selectAll;
+            this.$.sessionList.render();
+        },
+        _toggleFilter: function(array, masterArray) {
+            for (var i = 0; i < array.length - 1; i++) {
+                if (this.toggleFiltersButton.selectAll && !array[i].checked) {
+                    array[i].checked = true;
+                    this.filters.push(masterArray[i].name);
+                } else if (!this.toggleFiltersButton.selectAll && array[i].checked) {
+                    array[i].checked = false;
+                    this.filters.splice(this.filters.indexOf(masterArray[i].name), 1);
+                }
+            }
+        },
+        _filter: function(event) {
+            var filterName = event.model.filter.name,
+                filterStatus = event.srcElement.checked,
+                filterIndex = this.filters.indexOf(filterName);
+            if (filterStatus && filterIndex < 0) {
+                this.filters.push(filterName);
+            } else {
+                this.filters.splice(filterIndex, 1);
+            }
+            for (var i = 0; i < this.people.length; i++) {
+                this.people[i].hide = this._matchesFilters(this.people[i]);
+            }
+            this.$.sessionList.render();
+        },
+        _matchesFilters: function(person) {
+            if (!this.filters.length) {
+                return true;
+            }
+            for (var i = 0; i < this.filters.length; i++) {
+                if (person.tags.indexOf(this.filters[i]) > -1 || app.findByPropertyValue(person.badges, 'name', this.filters[i])) {
+                    return false;
+                }
+            }
+            return true;
+        },
+        checkHiding: function(person) {
+            return !person.hide;
+        }
+
+    });
+</script>
 <dom-module id="person-dialog" assetpath="person-dialog/">
     <template>
         <style include="tags-color"></style>
@@ -32614,6 +33498,10 @@ Polymer({
                     }
                 }
             }
+
+            peopleTemp.sort(function(p1, p2){
+              return p1.name.localeCompare(p2.name);
+            });
             this.people = peopleTemp;
 
             this._generateFilters();

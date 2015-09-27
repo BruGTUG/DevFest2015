@@ -7,7 +7,9 @@
     "language": "en",
     "complexity": "Intermediate",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 1"],
+    "time": "Sat, 14:45-15:30"
   },
   {
     "id": 102,
@@ -17,7 +19,9 @@
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 1"],
+    "time": "Sat, 10:00-10:45"
   },
   {
     "id": 103,
@@ -27,7 +31,9 @@
     "language": "en",
     "complexity": "Beginner - Medium",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 1"],
+    "time": "Sat, 10:45-11:30"
   },
   {
     "id": 104,
@@ -37,7 +43,21 @@
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 1"],
+    "time": "Sat, 15:45-16:30"
+  },
+  {
+    "id": 105,
+    "title": "Android Design Support Library",
+    "description": "",
+    "speakers": [16],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": "",
+    "tags": ["Day 1"],
+    "time": "Sat, 14:00-14:45"
   },
   {
     "id": 201,
@@ -47,17 +67,21 @@
     "language": "en",
     "complexity": "Beginner",
     "presentation": "http://opentechschool-brussels.github.io/webVR-for-3D-graphics-and-music/",
-    "video": ""
+    "video": "",
+    "tags": ["Day 2"],
+    "time": "Sun, 14:00-18:00"
   },
   {
     "id": 202,
     "title": "Moonshot Sprint",
     "description": "Work together with experts and peers to understand and getting closer to a solution for big problems.",
-    "speakers": [],
+    "speakers": [18, 19],
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 1"],
+    "time": "Sat, 13:00-18:00"
   },
   {
     "id": 301,
@@ -67,7 +91,9 @@
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 2"],
+    "time": "Sun, 12:30-13:15"
   },
   {
     "id": 302,
@@ -77,7 +103,9 @@
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 2"],
+    "time": "Sun, 11:45-12:30"
   },
   {
     "id": 303,
@@ -87,7 +115,9 @@
     "language": "en",
     "complexity": "Medium",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 2"],
+    "time": "Sun, 14:00-14:45"
   },
   {
     "id": 304,
@@ -97,7 +127,9 @@
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 1"],
+    "time": "Sat, 12:30-13:15"
   },
   {
     "id": 305,
@@ -107,7 +139,9 @@
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 1"],
+    "time": "Sat, 11:45-12:30"
   },
   {
     "id": 306,
@@ -117,7 +151,9 @@
     "language": "en",
     "complexity": "Beginner",
     "presentation": "http://remi-grumeau.com/talks/presentation-firebase/#/",
-    "video": ""
+    "video": "",
+    "tags": ["Day 2"],
+    "time": "Sun, 10:00-10:45"
   },
   {
     "id": 307,
@@ -127,17 +163,21 @@
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 2"],
+    "time": "Sun, 14:45-15:30"
   },
   {
     "id": 308,
     "title": "Eddystone - Beacons",
     "description": "Introduction to Eddystone and Google's Becaon platform",
-    "speakers": [14],
+    "speakers": [14, 17],
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 1"],
+    "time": "Sat, 16:30-18:00"
   },
   {
     "id": 309,
@@ -147,6 +187,20 @@
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
-    "video": ""
+    "video": "",
+    "tags": ["Day 2"],
+    "time": "Sun, 10:45-11:30"
+  },
+  {
+    "id": 310,
+    "title": "Polymer/Firebase Codelab",
+    "description": "Bring your laptop and dive into the code with Polymer and Firebase",
+    "speakers": [18],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": "",
+    "tags": ["Day 2"],
+    "time": "Sun, 15:45-18:00"
   }
 ]
