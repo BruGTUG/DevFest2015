@@ -286,8 +286,8 @@
 {
     "id": 14,
     "name": "Yannick Lemin",
-    "title": "Freelance",
-    "company": "TechYOS",
+    "title": "Organizer",
+    "company": "GDG Brussels",
     "country": "Belgium",
     "photoUrl": "../images/speakers/yannick.jpg",
     "bio": "",
@@ -340,6 +340,78 @@
     "photoUrl": "",
     "bio": "",
     "tags": ["Android"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 17,
+    "name": "Friedger Müffke",
+    "title": "Organizer",
+    "company": "GDG Brussels",
+    "country": "Germany",
+    "photoUrl": "",
+    "bio": "",
+    "tags": ["Android"],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 18,
+    "name": "Pieter-Jan Vandoermal",
+    "title": "Organizer",
+    "company": "GDG Brussels",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": [],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 19,
+    "name": "Ľuboš Omelina",
+    "title": "Organiser",
+    "company": "GDG Brussels",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": [],
     "badges": [],
     "socials": [{
         "name": "Google+",
