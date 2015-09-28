@@ -28,7 +28,7 @@
     "title": "",
     "company": "Ergonline",
     "country": "Belgium",
-    "photoUrl": "",
+    "photoUrl": "http://ergonline.be/wp-content/uploads/2015/02/raphael_ux_bruxelles.png",
     "bio": "",
     "tags": ["UX"],
     "badges": [],
@@ -52,7 +52,7 @@
     "title": "UX Consultant",
     "company": "Movify",
     "country": "Belgium/Poland",
-    "photoUrl": "",
+    "photoUrl": "https://media.licdn.com/media/p/2/005/05e/317/3d7c563.jpg",
     "bio": "Karol is a UX Designer for digital products and services, specialising in convergent solutions for multiple platforms (mobile-web-TV). He has a strong background in usability engineering, information architecture and interaction design. With his experience he provided UX solutions for various clients in USA and Europe, from small business to organisations and Fortune 500 companies.  He designed for Time Warner, Washington Post, ING, BNP Paribas Fortis, Mars, Proximus to name just few. In 2014 he joined Movify.be where he continues to design UX solutions.",
     "tags": ["UX"],
     "badges": [],
@@ -352,22 +352,19 @@
     "title": "Organizer",
     "company": "GDG Brussels",
     "country": "Germany",
-    "photoUrl": "",
+    "photoUrl": "../images/speakers/friedger.jpg",
     "bio": "",
     "tags": ["Android"],
     "badges": [],
     "socials": [{
-        "name": "Google+",
-        "link": ""
-    }, {
         "name": "Website",
-        "link": ""
+        "link": "https://about.me/friedger"
     }, {
         "name": "Twitter",
-        "link": ""
+        "link": "https://twitter.com/fmdroid"
     }, {
         "name": "GitHub",
-        "link": ""
+        "link": "https://github.com/friedger"
     }]
 },
 {
@@ -376,7 +373,7 @@
     "title": "Organizer",
     "company": "GDG Brussels",
     "country": "Belgium",
-    "photoUrl": "",
+    "photoUrl": "../images/speakers/pjv.jpg",
     "bio": "",
     "tags": [],
     "badges": [],
@@ -400,7 +397,7 @@
     "title": "Organiser",
     "company": "GDG Brussels",
     "country": "Belgium",
-    "photoUrl": "",
+    "photoUrl": "https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/6/000/215/15b/2022272.jpg",
     "bio": "",
     "tags": [],
     "badges": [],
