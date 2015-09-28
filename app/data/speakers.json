@@ -334,25 +334,19 @@
 {
     "id": 16,
     "name": "Benjamin Monjoie",
-    "title": "Android Developer",
+    "title": "Android Evangelist",
     "company": "Emakina",
     "country": "Belgium",
-    "photoUrl": "",
-    "bio": "",
+    "photoUrl": "../images/speakers/benjamin.jpg",
+    "bio": "Benjamin Monjoie holds a master's degree in computer science. Developer since 2004, he has grown fond of the little green robot since he started tinkering with it in 2011. He currently works at Emakina as lead Android developer where he likes to focus on code quality and maintainability.",
     "tags": ["Android"],
     "badges": [],
     "socials": [{
         "name": "Google+",
-        "link": ""
-    }, {
-        "name": "Website",
-        "link": ""
+        "link": "https://plus.google.com/+BenjaminMonjoieXzan"
     }, {
         "name": "Twitter",
-        "link": ""
-    }, {
-        "name": "GitHub",
-        "link": ""
+        "link": "https://twitter.com/Xzan"
     }]
 },
 {
