@@ -133,7 +133,7 @@
     "title": "Technical Evangelist",
     "company": "Microsoft",
     "country": "Belgium",
-    "photoUrl": "",
+    "photoUrl": "../images/speakers/nick.jpg",
     "bio": "",
     "tags": ["Tooling"],
     "badges": [],
@@ -196,22 +196,19 @@
     "title": "Storydriven Code",
     "company": "Crashlab",
     "country": "Belgium",
-    "photoUrl": "",
+    "photoUrl": "../images/speakers/jan.png",
     "bio": "",
     "tags": ["Code"],
     "badges": [],
     "socials": [{
-        "name": "Google+",
-        "link": ""
-    }, {
         "name": "Website",
-        "link": ""
+        "link": "http://crashlab.be"
     }, {
         "name": "Twitter",
-        "link": ""
+        "link": "https://twitter.com/j_everaert"
     }, {
         "name": "GitHub",
-        "link": ""
+        "link": "https://github.com/EveraertJan"
     }]
 },
 {

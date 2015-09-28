@@ -60,7 +60,7 @@
         <div class="container text-center">
             <content></content>
             <div class="flex wrap layout horizontal people-wraper">
-                <template is="dom-repeat" items="[[people)]" as="person">
+                <template is="dom-repeat" items="[[people]]" as="person">
                     <div class="fe-people two-column-xs">
                         <iron-image src="[[person.photoUrl]]" class="fe-people-img placeholder-color img-circle" preload fade sizing="cover"></iron-image>
                         <h4 class="fe-people-name">
@@ -85,8 +85,8 @@
         properties: {
             source: String
         },
-        peopleLoaded: function(event, response) {
-            this.people = this.randomOrder(response.response).slice(0, 4);
+        peopleLoaded: function(event, request) {
+            this.people = this.randomOrder(request.response).slice(0, 4);
         },
         randomOrder: function(array) {
             return array.sort(function() {
