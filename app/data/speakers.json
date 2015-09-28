@@ -426,6 +426,54 @@
         "name": "GitHub",
         "link": ""
     }]
+},
+{
+    "id": 20,
+    "name": "Roman Miletitch",
+    "title": "Organiser",
+    "company": "OpenTechSchool Brussels",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": [],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
+},
+{
+    "id": 21,
+    "name": "Fabien Benetou",
+    "title": "",
+    "company": "",
+    "country": "Belgium",
+    "photoUrl": "",
+    "bio": "",
+    "tags": [],
+    "badges": [],
+    "socials": [{
+        "name": "Google+",
+        "link": ""
+    }, {
+        "name": "Website",
+        "link": ""
+    }, {
+        "name": "Twitter",
+        "link": ""
+    }, {
+        "name": "GitHub",
+        "link": ""
+    }]
 }
 
 ]

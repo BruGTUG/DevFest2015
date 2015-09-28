@@ -63,7 +63,7 @@
     "id": 201,
     "title": "WebVR Workshop",
     "description": "Come experience Virtual Reality, build from scratch your own immersive environment (graphic, sound & interaction) and connect your world to others through the web!",
-    "speakers": [],
+    "speakers": [20, 21],
     "language": "en",
     "complexity": "Beginner",
     "presentation": "http://opentechschool-brussels.github.io/webVR-for-3D-graphics-and-music/",
