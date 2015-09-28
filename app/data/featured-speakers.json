@@ -3,4 +3,16 @@
     "name": "Benoit Leseul",
     "company": "Mozilla, Belgium",
     "photoUrl": "https://media.licdn.com/media/p/2/005/08e/3ec/28d610d.jpg"
+},
+{
+    "id": 7,
+    "name": "Nick Trogh",
+    "company": "Microsoft, Belgium",
+    "photoUrl": "../images/speakers/nick.jpg"
+},
+{
+    "id": 9,
+    "name": "Xavier Hallade",
+    "company": "Intel, France",
+    "photoUrl": "http://lh4.googleusercontent.com/-AoPlZgdczEU/AAAAAAAAAAI/AAAAAAAAAKE/LVHTVq7HG8A/photo.jpg"
 }]
