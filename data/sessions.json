@@ -50,7 +50,7 @@
   {
     "id": 105,
     "title": "Android Design Support Library",
-    "description": "",
+    "description": "This talk aims at presenting the Android Design Support Library released by Google in May 2015. It will walk you through the key components in this library with examples and special attention to pitfalls and tips.",
     "speakers": [16],
     "language": "en",
     "complexity": "Beginner",
