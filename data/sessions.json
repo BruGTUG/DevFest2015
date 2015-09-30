@@ -13,9 +13,9 @@
   },
   {
     "id": 102,
-    "title": "UX talk 1",
+    "title": "Usability Cafe",
     "description": "",
-    "speakers": [2],
+    "speakers": [17],
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
@@ -85,9 +85,9 @@
   },
   {
     "id": 301,
-    "title": "Data Privacy",
+    "title": "Cancelled - (Data Privacy)",
     "description": "",
-    "speakers": [6],
+    "speakers": [],
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
@@ -202,5 +202,46 @@
     "video": "",
     "tags": ["Day 2"],
     "time": "Sun, 15:45-18:00"
-  }
-]
+  },
+  {
+    "id": 401,
+    "title": "Coffee break",
+    "speakers": [],
+    "tags": ["Day 1", "Break"],
+    "time": "Sat, 11:30-11:45"
+  },
+  {
+    "id": 402,
+    "title": "Lunch break",
+    "speakers": [],
+    "tags": ["Day 1", "Break"],
+    "time": "Sat, 13:00-14:00"
+  },
+  {
+    "id": 403,
+    "title": "Coffee break",
+    "speakers": [],
+    "tags": ["Day 1", "Break"],
+    "time": "Sat, 15:30-15:45"
+  },
+  {
+    "id": 501,
+    "title": "Coffee break",
+    "speakers": [],
+    "tags": ["Day 2", "Break"],
+    "time": "Sun, 11:30-11:45"
+  },
+  {
+    "id": 502,
+    "title": "Lunch break",
+    "speakers": [],
+    "tags": ["Day 2", "Break"],
+    "time": "Sun, 13:30-14:00"
+  },
+  {
+    "id": 503,
+    "title": "Coffee break",
+    "speakers": [],
+    "tags": ["Day 2", "Break"],
+    "time": "Sun, 15:30-15:45"
+  }]
