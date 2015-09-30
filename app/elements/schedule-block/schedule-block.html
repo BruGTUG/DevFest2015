@@ -121,6 +121,10 @@
                 -webkit-box-orient: vertical;
             }
 
+            .grey-background {
+              background-color: #dddddd;
+            }
+
             .filters {
                 margin-bottom: 20px;
             }
@@ -306,6 +310,9 @@
 
           for (var i = 0; i < sessions.length; i++) {
               sessions[i].speakerList = [];
+              if (sessions[i].tags.indexOf("Break") > -1) {
+                sessions[i].isBreak = true;
+              }
               for (var j = 0; j < peopleTemp.length; j++) {
                   if (sessions[i].speakers.indexOf(peopleTemp[j].id) > -1) {
                     sessions[i].speakerList.push(peopleTemp[j]);
