@@ -10,7 +10,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-material/paper-material.html">
-<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 
 <!--
 Material Design: <a href="http://www.google.com/design/spec/components/cards.html">Cards</a>
@@ -63,11 +62,6 @@ Custom property | Description | Default
         @apply(--paper-card);
       }
 
-      paper-material {
-        border-radius: inherit;
-        @apply(--layout-fit);
-      }
-
       /* IE 10 support for HTML5 hidden attr */
       [hidden] {
         display: none !important;
@@ -112,14 +106,16 @@ Custom property | Description | Default
       }
     </style>
 
-    <paper-material animated$="[[animatedShadow]]" elevation="[[elevation]]"></paper-material>
+    <paper-material id="shadow" animated$="[[animatedShadow]]" elevation=[[elevation]]>
+      <div class="header">
+        <img hidden$="[[!image]]" src="[[image]]">
+        <div hidden$="[[!heading]]" class$="[[_computeHeadingClass(image)]]">[[heading]]</div>
+      </div>
 
-    <div class="header">
-      <img hidden$="[[!image]]" src="[[image]]">
-      <div hidden$="[[!heading]]" class$="[[_computeHeadingClass(image)]]">[[heading]]</div>
-    </div>
+      <content></content>
 
-    <content></content>
+    </paper-material>
+
   </template>
 
 </dom-module>
