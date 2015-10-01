@@ -369,7 +369,7 @@
 },
 {
     "id": 18,
-    "name": "Pieter-Jan Vandoermal",
+    "name": "Pieter-Jan Vandormael",
     "title": "Organizer",
     "company": "GDG Brussels",
     "country": "Belgium",
@@ -379,16 +379,13 @@
     "badges": [],
     "socials": [{
         "name": "Google+",
-        "link": ""
-    }, {
-        "name": "Website",
-        "link": ""
+        "link": "https://plus.google.com/+PieterJanVandormael"
     }, {
         "name": "Twitter",
-        "link": ""
+        "link": "https://twitter.com/pjv_"
     }, {
         "name": "GitHub",
-        "link": ""
+        "link": "https://github.com/pjjjv"
     }]
 },
 {
