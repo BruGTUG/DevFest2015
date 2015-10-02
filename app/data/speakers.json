@@ -25,25 +25,22 @@
 {
     "id": 2,
     "name": "Raphael de Robiano",
-    "title": "",
+    "title": "UX Expert",
     "company": "Ergonline",
     "country": "Belgium",
     "photoUrl": "http://ergonline.be/wp-content/uploads/2015/02/raphael_ux_bruxelles.png",
-    "bio": "",
+    "bio": "Raphaël de Robiano is the Founder of Ergonline, a Belgian UX Agency. Previously he was Head of UX at Emakina. He studied Communication, Design and Usability. More on www.Ergonline.be",
     "tags": ["UX"],
     "badges": [],
     "socials": [{
-        "name": "Google+",
-        "link": ""
+        "name": "LinkedIn",
+        "link": "https://www.linkedin.com/in/raphaelderobiano4usability/fr"
     }, {
         "name": "Website",
-        "link": ""
+        "link": "http://www.ergonline.be"
     }, {
         "name": "Twitter",
-        "link": ""
-    }, {
-        "name": "GitHub",
-        "link": ""
+        "link": "twitter.com/rderobiano"
     }]
 },
 {
