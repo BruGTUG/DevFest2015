@@ -97,7 +97,7 @@
   },
   {
     "id": 302,
-    "title": "Multi-platform mobile development",
+    "title": "Canncelled - (Multi-platform mobile development)",
     "description": "",
     "speakers": [7],
     "language": "en",
@@ -117,7 +117,7 @@
     "presentation": "",
     "video": "",
     "tags": ["Day 2"],
-    "time": "Sun, 14:00-14:45"
+    "time": "Sun, 12:30-13:15"
   },
   {
     "id": 304,
@@ -157,7 +157,7 @@
   },
   {
     "id": 307,
-    "title": "Understanding React: Learn once, run everywhere",
+    "title": "Canncelled - Understanding React: Learn once, run everywhere",
     "description": "React is a JavaScript library for building user interfaces that run natively in their environment. By understanding the main concepts behind React, you will be able to build native applications on the web and on mobile using the same techniques: Learn once and run everywhere.",
     "speakers": [13],
     "language": "en",
