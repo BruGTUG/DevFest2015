@@ -201,7 +201,19 @@
     "presentation": "",
     "video": "",
     "tags": ["Day 2"],
-    "time": "Sun, 15:45-18:00"
+    "time": "Sun, 14:00-18:00"
+  },
+  {
+    "id": 601,
+    "title": "Your projects",
+    "description": "Present your project",
+    "speakers": [],
+    "language": "en",
+    "complexity": "Beginner",
+    "presentation": "",
+    "video": "",
+    "tags": ["Day 2"],
+    "time": "Sun, 14:00-14:30"
   },
   {
     "id": 401,
