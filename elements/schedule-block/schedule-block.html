@@ -194,6 +194,10 @@
                                             <h3 class="session-title">[[speaker.name]]</h3>
                                         </template>
                                     </div>
+                                    <paper-button class="card-content" hidden$="{{session.hideSlides}}" on-tap="openSlides">
+                                        Presentation
+                                        <iron-icon icon="image:slideshow"/>
+                                    </paper-button>
                                     <!-- <div class="card-actions">
                             <paper-button on-tap="readMore">Open details</paper-button>
                         </div> -->
@@ -318,6 +322,13 @@
                     sessions[i].speakerList.push(peopleTemp[j]);
                   }
               }
+              if (typeof(sessions[i].presentation) !== 'undefined' && sessions[i].presentation.length > 0) {
+                  sessions[i].hideSlides = false;
+              } else {
+                 sessions[i].hideSlides = true;
+              }
+
+
           }
 
             sessions.sort(function(p1, p2){
@@ -388,6 +399,11 @@
         readMore: function(event) {
             page.redirect('/schedule/' + event.model.session.id);
             this.openSession(event.model.session);
+        },
+        openSlides: function(event) {
+            event.cancelBubble = true;
+            event.stopPropagation();
+            window.open(event.model.session.presentation);
         },
         openSession: function(person) {
             this.opened = true;
