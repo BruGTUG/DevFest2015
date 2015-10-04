@@ -236,7 +236,7 @@
             }
             this.tags = tempTags;
 
-            if (typeof(this.session.presentation) != "undefined" && this.session.presentation.length > 0) {
+            if (typeof(this.session.presentation) !== 'undefined' && this.session.presentation.length > 0) {
                 this.session.hideSlides = false;
             } else {
                 this.session.hideSlides = true;
