@@ -127,6 +127,10 @@
                             <span class$="[[tag.tagClass]]">[[tag.name]]</span>
                         </template>
                     </div>
+                    <paper-button class="card-content" hidden$="{{session.hideSlides}}" on-tap="openSlides">
+                        Presentation
+                        <iron-icon icon="image:slideshow"/>
+                    </paper-button>
                     <div class="card-content session-description">
                         <marked-element markdown="[[session.description]]"></marked-element>
                     </div>
@@ -161,6 +165,10 @@
                         <span class$="[[tag.tagClass]]">[[tag.name]]</span>
                     </template>
                 </div>
+                <paper-button class="card-content" hidden$="{{session.hideSlides}}" on-tap="openSlides">
+                    Presentation
+                    <iron-icon icon="image:slideshow"/>
+                </paper-button>
                 <div class="card-content session-description">
                     <marked-element markdown="[[session.description]]"></marked-element>
                 </div>
@@ -203,6 +211,11 @@
                 Polymer.Base.transform('translate3d(' + transform + 'px,0,0)', title);
             });
         },
+        openSlides: function(event) {
+            event.cancelBubble = true;
+            event.stopPropagation();
+            window.open(this.session.presentation);
+        },
         _sessionChanged: function() {
             this.$.scrollHeaderPanel.$.headerBg.style.background = 'linear-gradient(to top, rgba(0, 0, 0, 0.4) -10%, rgba(0, 0, 0, 0.1) 50%), url(' + this.session.photoUrl + ') 0 / cover no-repeat';
             // var panelClass = 'visible-xs fit ' + app.generateClass(this.session.tags[0]);
@@ -222,6 +235,12 @@
                 });
             }
             this.tags = tempTags;
+
+            if (typeof(this.session.presentation) != "undefined" && this.session.presentation.length > 0) {
+                this.session.hideSlides = false;
+            } else {
+                this.session.hideSlides = true;
+            }
         },
         navigateToSpeaker: function() {
           //TODO

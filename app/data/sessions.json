@@ -97,9 +97,9 @@
   },
   {
     "id": 302,
-    "title": "Canncelled - (Multi-platform mobile development)",
+    "title": "Cancelled - (Multi-platform mobile development)",
     "description": "",
-    "speakers": [7],
+    "speakers": [],
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
@@ -157,9 +157,9 @@
   },
   {
     "id": 307,
-    "title": "Canncelled - Understanding React: Learn once, run everywhere",
+    "title": "Cancelled (Understanding React: Learn once, run everywhere)",
     "description": "React is a JavaScript library for building user interfaces that run natively in their environment. By understanding the main concepts behind React, you will be able to build native applications on the web and on mobile using the same techniques: Learn once and run everywhere.",
-    "speakers": [13],
+    "speakers": [],
     "language": "en",
     "complexity": "Beginner",
     "presentation": "",
@@ -202,18 +202,6 @@
     "video": "",
     "tags": ["Day 2"],
     "time": "Sun, 14:00-18:00"
-  },
-  {
-    "id": 601,
-    "title": "Your projects",
-    "description": "Present your project",
-    "speakers": [],
-    "language": "en",
-    "complexity": "Beginner",
-    "presentation": "",
-    "video": "",
-    "tags": ["Day 2"],
-    "time": "Sun, 14:00-14:30"
   },
   {
     "id": 401,
