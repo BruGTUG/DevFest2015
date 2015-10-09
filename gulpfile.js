@@ -142,6 +142,12 @@ gulp.task('posts', function () {
     .pipe($.size({title: 'posts'}));
 });
 
+gulp.task('presentations', function () {
+  return gulp.src(['app/presentations/**'])
+    .pipe(gulp.dest('dist/presentations'))
+    .pipe($.size({title: 'presentations'}));
+});
+
 // Scan Your HTML For Assets & Optimize Them
 gulp.task('html', function () {
   var assets = $.useref.assets({searchPath: ['.tmp', 'app', 'dist']});
@@ -271,7 +277,7 @@ gulp.task('default', ['clean'], function (cb) {
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
-    'vulcanize', 'precache', '2014', 'assets', 'data', 'posts',
+    'vulcanize', 'precache', '2014', 'assets', 'data', 'posts', 'presentations',
     cb);
 });
 
